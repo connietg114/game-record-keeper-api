@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Documents\\Tournament Website\\TournamentRecordKeeperBackEnd\\TournamentRecordKeeperBackEnd\\TournamentRecordKeeperApi\\TournamentRecordKeeperApi.csproj": {}
+    "D:\\Documents\\Tournament Website\\TournamentRecordKeeperBackEnd\\game-record-keeper-api\\TournamentRecordKeeperApi\\TournamentRecordKeeperApi.csproj": {}
   },
   "projects": {
-    "D:\\Documents\\Tournament Website\\TournamentRecordKeeperBackEnd\\TournamentRecordKeeperBackEnd\\TournamentRecordKeeperApi\\TournamentRecordKeeperApi.csproj": {
+    "D:\\Documents\\Tournament Website\\TournamentRecordKeeperBackEnd\\game-record-keeper-api\\TournamentRecordKeeperApi\\TournamentRecordKeeperApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Documents\\Tournament Website\\TournamentRecordKeeperBackEnd\\TournamentRecordKeeperBackEnd\\TournamentRecordKeeperApi\\TournamentRecordKeeperApi.csproj",
+        "projectUniqueName": "D:\\Documents\\Tournament Website\\TournamentRecordKeeperBackEnd\\game-record-keeper-api\\TournamentRecordKeeperApi\\TournamentRecordKeeperApi.csproj",
         "projectName": "TournamentRecordKeeperApi",
-        "projectPath": "D:\\Documents\\Tournament Website\\TournamentRecordKeeperBackEnd\\TournamentRecordKeeperBackEnd\\TournamentRecordKeeperApi\\TournamentRecordKeeperApi.csproj",
+        "projectPath": "D:\\Documents\\Tournament Website\\TournamentRecordKeeperBackEnd\\game-record-keeper-api\\TournamentRecordKeeperApi\\TournamentRecordKeeperApi.csproj",
         "packagesPath": "C:\\Users\\tracy\\.nuget\\packages\\",
-        "outputPath": "D:\\Documents\\Tournament Website\\TournamentRecordKeeperBackEnd\\TournamentRecordKeeperBackEnd\\TournamentRecordKeeperApi\\obj\\",
+        "outputPath": "D:\\Documents\\Tournament Website\\TournamentRecordKeeperBackEnd\\game-record-keeper-api\\TournamentRecordKeeperApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tracy\\AppData\\Roaming\\NuGet\\NuGet.Config",
