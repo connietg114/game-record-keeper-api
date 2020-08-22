@@ -31,6 +31,17 @@ namespace TournamentRecordKeeperApi
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
             //services.AddRazorPages();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: "MyOrigins",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                            .AllowAnyHeader();
+                    });
+            });
+
             services.AddControllers();
         }
 
@@ -60,6 +71,7 @@ namespace TournamentRecordKeeperApi
                 }
 
                 context.SaveChanges();
+
             }
 
             if (env.IsDevelopment())
@@ -70,6 +82,8 @@ namespace TournamentRecordKeeperApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("MyOrigins");
 
             app.UseAuthorization();
 
