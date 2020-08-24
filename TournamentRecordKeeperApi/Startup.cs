@@ -42,7 +42,7 @@ namespace TournamentRecordKeeperApi
                 var context = serviceScope.ServiceProvider.GetRequiredService<appContext>();
                 context.Database.EnsureCreated();
 
-                if (context.Games.Count() == 0)
+                /*if (context.Games.Count() == 0)
                 {
                     context.Games.Add(new Models.Game
                     {
@@ -57,7 +57,9 @@ namespace TournamentRecordKeeperApi
                         MinPlayerCount = 1,
                         MaxPlayerCount = 4
                     });
-                }
+                }*/
+
+               
 
                 context.SaveChanges();
             }
