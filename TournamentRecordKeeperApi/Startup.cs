@@ -31,6 +31,17 @@ namespace TournamentRecordKeeperApi
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
             //services.AddRazorPages();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: "MyOrigins",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                            .AllowAnyHeader();
+                    });
+            });
+
             services.AddControllers();
         }
 
@@ -42,7 +53,7 @@ namespace TournamentRecordKeeperApi
                 var context = serviceScope.ServiceProvider.GetRequiredService<appContext>();
                 context.Database.EnsureCreated();
 
-                /*if (context.Games.Count() == 0)
+                if (context.Games.Count() == 0)
                 {
                     context.Games.Add(new Models.Game
                     {
@@ -57,11 +68,12 @@ namespace TournamentRecordKeeperApi
                         MinPlayerCount = 1,
                         MaxPlayerCount = 4
                     });
-                }*/
+                }
 
                
 
                 context.SaveChanges();
+
             }
 
             if (env.IsDevelopment())
@@ -72,6 +84,8 @@ namespace TournamentRecordKeeperApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("MyOrigins");
 
             app.UseAuthorization();
 
