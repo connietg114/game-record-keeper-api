@@ -57,7 +57,22 @@ namespace TournamentRecordKeeperApi
                         MinPlayerCount = 1,
                         MaxPlayerCount = 4
                     });
+                    
                 }
+                //if (context.GameMatches.Count() == 0)
+                //{
+                //    context.GameMatches.Add(new Models.GameMatch
+                //    {
+                //        MatchDate = DateTime.Parse("Jan 1, 2009"),
+                //        game =
+                //        {
+                //            Name = "Catan",
+                //            MinPlayerCount = 2,
+                //            MaxPlayerCount = 4
+                //        }
+
+                //    });
+                //}
 
                 context.SaveChanges();
             }
