@@ -10,7 +10,7 @@ using TournamentRecordKeeperApi.Data;
 namespace TournamentRecordKeeperApi.Migrations
 {
     [DbContext(typeof(appContext))]
-    [Migration("20200825085926_InitialCreate")]
+    [Migration("20200825122302_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,30 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.HasIndex("gameID");
 
                     b.ToTable("GameMatches");
+                });
+
+            modelBuilder.Entity("TournamentRecordKeeperApi.Models.Tournament", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TournamentType")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Tournaments");
                 });
 
             modelBuilder.Entity("TournamentRecordKeeperApi.Models.GameMatch", b =>

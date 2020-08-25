@@ -23,6 +23,22 @@ namespace TournamentRecordKeeperApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tournaments",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    TournamentType = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tournaments", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GameMatches",
                 columns: table => new
                 {
@@ -52,6 +68,9 @@ namespace TournamentRecordKeeperApi.Migrations
         {
             migrationBuilder.DropTable(
                 name: "GameMatches");
+
+            migrationBuilder.DropTable(
+                name: "Tournaments");
 
             migrationBuilder.DropTable(
                 name: "Games");
