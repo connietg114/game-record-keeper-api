@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using TournamentRecordKeeperApi.Models;
 using TournamentRecordKeeperApi.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 
 namespace TournamentRecordKeeperApi.Controllers
@@ -22,12 +23,12 @@ namespace TournamentRecordKeeperApi.Controllers
             _context = context;
         }
 
-        //[HttpGet]
+        [HttpGet]
 
-        //public IEnumerable<GameMatch> Get()
-        //{
-        //    return _context.GameMatches.ToList();
-        //}
+        public IEnumerable<GameMatch> Get()
+        {
+            return _context.GameMatches.Include(gm=>gm.game).AsEnumerable().Where(g=>(DateTime.Now-g.MatchDate).Days<=90).ToList();
+        }
 
     }
 }
