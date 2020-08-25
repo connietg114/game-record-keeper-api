@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using TournamentRecordKeeperApi.Data;
+using Newtonsoft;
 
 namespace TournamentRecordKeeperApi
 {
@@ -51,7 +52,7 @@ namespace TournamentRecordKeeperApi
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<appContext>();
-                context.Database.EnsureCreated();
+                context.Database.Migrate();
 
                 if (context.Games.Count() == 0)
                 {
@@ -70,20 +71,23 @@ namespace TournamentRecordKeeperApi
                     });
                     
                 }
-                //if (context.GameMatches.Count() == 0)
-                //{
-                //    context.GameMatches.Add(new Models.GameMatch
-                //    {
-                //        MatchDate = DateTime.Parse("Jan 1, 2009"),
-                //        game =
-                //        {
-                //            Name = "Catan",
-                //            MinPlayerCount = 2,
-                //            MaxPlayerCount = 4
-                //        }
+                context.SaveChanges();
+                if (context.GameMatches.Count() == 0)
+                {
+                    context.GameMatches.Add(new Models.GameMatch
+                    {
+                        MatchDate = new DateTime(2020, 03, 06),
+                        game = context.Games.SingleOrDefault(game => game.ID == 1)
 
-                //    });
-                //}
+                    });
+                    context.GameMatches.Add(new Models.GameMatch
+                    {
+                        MatchDate = new DateTime(2020, 08, 10),
+                        game = context.Games.SingleOrDefault(game => game.ID == 2)
+
+                    });
+
+                }
 
                 context.SaveChanges();
 

@@ -23,7 +23,7 @@ namespace TournamentRecordKeeperApi.Controllers
         }
 
         //[HttpGet]
-        
+
         //public IEnumerable<GameMatch> Get()
         //{
         //    return _context.GameMatches.ToList();
