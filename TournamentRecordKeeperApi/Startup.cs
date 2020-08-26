@@ -72,14 +72,15 @@ namespace TournamentRecordKeeperApi
                     });
                     
                 }
-                context.SaveChanges();
+
                 if (context.GameMatches.Count() == 0)
                 {
                     context.GameMatches.Add(new Models.GameMatch
                     {
                         MatchDate = new DateTime(2020, 03, 06),
                         game = context.Games.SingleOrDefault(game => game.ID == 1)
-			});
+                    });
+
                     context.GameMatches.Add(new Models.GameMatch
                     {
                         MatchDate = new DateTime(2020, 08, 10),
@@ -88,17 +89,18 @@ namespace TournamentRecordKeeperApi
                     });
 
                 }
+
 			if (context.Tournaments.Count() == 0)
                 {
                     context.Tournaments.Add(new Models.Tournament
                     {
-                        ID = 00001,
+                        //ID = 00001,
                         Name = "TournamentOne"
                     });
 
                     context.Tournaments.Add(new Models.Tournament
                     {
-                        ID = 00002,
+                        //ID = 00002,
                         Name = "TournamentTwo"
                     });
 
