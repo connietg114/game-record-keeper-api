@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using TournamentRecordKeeperApi.Data;
+using Microsoft.VisualBasic;
 
 namespace TournamentRecordKeeperApi
 {
@@ -53,7 +54,7 @@ namespace TournamentRecordKeeperApi
                 var context = serviceScope.ServiceProvider.GetRequiredService<appContext>();
                 context.Database.EnsureCreated();
 
-                if (context.Games.Count() == 0)
+               if (context.Games.Count() == 0)
                 {
                     context.Games.Add(new Models.Game
                     {
@@ -68,6 +69,22 @@ namespace TournamentRecordKeeperApi
                         MinPlayerCount = 1,
                         MaxPlayerCount = 4
                     });
+                }
+
+               if (context.Tournaments.Count() == 0)
+                {
+                    context.Tournaments.Add(new Models.Tournament
+                    {
+                        ID = 00001,
+                        Name = "TournamentOne"
+                    });
+
+                    context.Tournaments.Add(new Models.Tournament
+                    {
+                        ID = 00002,
+                        Name = "TournamentTwo"
+                    });
+
                 }
 
                
