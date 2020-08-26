@@ -8,9 +8,10 @@ namespace TournamentRecordKeeperApi.Data
     public class appContext: DbContext
     {
         public appContext(DbContextOptions options) : base(options) { }
-        public DbSet<Game> Games { get; set; }  
-        public DbSet<Tournament> Tournaments { get; set; }
 
+        public DbSet<Game> Games { get; set; }
+        public DbSet<GameMatch> GameMatches { get; set; }
+        public DbSet<Tournament> Tournaments { get; set; }
 
         
     }

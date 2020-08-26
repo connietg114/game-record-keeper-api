@@ -12,7 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using TournamentRecordKeeperApi.Data;
-using Microsoft.VisualBasic;
+using Newtonsoft;
+
 
 namespace TournamentRecordKeeperApi
 {
@@ -69,9 +70,25 @@ namespace TournamentRecordKeeperApi
                         MinPlayerCount = 1,
                         MaxPlayerCount = 4
                     });
+                    
                 }
+                context.SaveChanges();
+                if (context.GameMatches.Count() == 0)
+                {
+                    context.GameMatches.Add(new Models.GameMatch
+                    {
+                        MatchDate = new DateTime(2020, 03, 06),
+                        game = context.Games.SingleOrDefault(game => game.ID == 1)
+			});
+                    context.GameMatches.Add(new Models.GameMatch
+                    {
+                        MatchDate = new DateTime(2020, 08, 10),
+                        game = context.Games.SingleOrDefault(game => game.ID == 2)
 
-               if (context.Tournaments.Count() == 0)
+                    });
+
+                }
+			if (context.Tournaments.Count() == 0)
                 {
                     context.Tournaments.Add(new Models.Tournament
                     {
@@ -85,9 +102,7 @@ namespace TournamentRecordKeeperApi
                         Name = "TournamentTwo"
                     });
 
-                }
-
-               
+                }               
 
                 context.SaveChanges();
 
