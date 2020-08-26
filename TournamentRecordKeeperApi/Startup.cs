@@ -53,7 +53,7 @@ namespace TournamentRecordKeeperApi
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<appContext>();
-                context.Database.EnsureCreated();
+                context.Database.Migrate();
 
                if (context.Games.Count() == 0)
                 {

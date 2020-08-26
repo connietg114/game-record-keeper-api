@@ -8,7 +8,7 @@ namespace TournamentRecordKeeperApi.Models
     public class GameMode
     {
         public int ID { get; set; }
-        public virtual Game game { get; set; }
+        public Game game { get; set; }
         public string Name { get; set; }
         public int WinCondition { get; set; }
 
