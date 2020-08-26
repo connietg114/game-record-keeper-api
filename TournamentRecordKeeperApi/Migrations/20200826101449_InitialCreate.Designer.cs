@@ -10,7 +10,7 @@ using TournamentRecordKeeperApi.Data;
 namespace TournamentRecordKeeperApi.Migrations
 {
     [DbContext(typeof(appContext))]
-    [Migration("20200826095122_InitialCreate")]
+    [Migration("20200826101449_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

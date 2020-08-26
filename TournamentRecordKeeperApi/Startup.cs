@@ -72,6 +72,7 @@ namespace TournamentRecordKeeperApi
                     });
                     
                 }
+                context.SaveChanges();
 
                 if (context.GameMatches.Count() == 0)
                 {
@@ -89,8 +90,9 @@ namespace TournamentRecordKeeperApi
                     });
 
                 }
+                context.SaveChanges();
 
-			if (context.Tournaments.Count() == 0)
+                if (context.Tournaments.Count() == 0)
                 {
                     context.Tournaments.Add(new Models.Tournament
                     {
