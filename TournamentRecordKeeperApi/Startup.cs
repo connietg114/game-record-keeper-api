@@ -96,13 +96,13 @@ namespace TournamentRecordKeeperApi
                 {
                     context.Tournaments.Add(new Models.Tournament
                     {
-                        //ID = 00001,
+                        tournamentType = context.TournamentTypes.SingleOrDefault(type => type.ID == 1),
                         Name = "TournamentOne"
-                    });
+                    }); 
 
                     context.Tournaments.Add(new Models.Tournament
                     {
-                        //ID = 00002,
+                        tournamentType = context.TournamentTypes.SingleOrDefault(type => type.ID == 2),
                         Name = "TournamentTwo"
                     });
 
@@ -110,9 +110,9 @@ namespace TournamentRecordKeeperApi
 
                 context.SaveChanges();
 
-                if (context.tournamentTypes.Count() == 0)
+                if (context.TournamentTypes.Count() == 0)
                 {
-                    context.tournamentTypes.Add(new Models.TournamentType
+                    context.TournamentTypes.Add(new Models.TournamentType
                     {
                         Name = "Round-robin (all-play-all)",
                         Description = "A round-robin tournament (or all-play-all tournament) is a competition in which each contestant meets all other " +
@@ -120,13 +120,13 @@ namespace TournamentRecordKeeperApi
                         "certain number of losses."
                     });
 
-                    context.tournamentTypes.Add(new Models.TournamentType
+                    context.TournamentTypes.Add(new Models.TournamentType
                     {
                         Name = "Elimination",
                         Description = "A competition in which only the winners of each stage play in the next stage, until one competitor or team is the final winner."
                     });
 
-                    context.tournamentTypes.Add(new Models.TournamentType
+                    context.TournamentTypes.Add(new Models.TournamentType
                     {
                         Name = "Ladder",
                         Description = "A tournament in which the entrants are listed by name and rank, advancement being by means of challenging and " +

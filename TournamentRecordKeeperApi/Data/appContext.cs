@@ -13,10 +13,7 @@ namespace TournamentRecordKeeperApi.Data
         public DbSet<GameMatch> GameMatches { get; set; }
         public DbSet<Tournament> Tournaments { get; set; }
         public DbSet<GameMode> GameModes { get; set; }
-        public DbSet<TournamentType> tournamentTypes { get; set; }
-        
-
-
+        public DbSet<TournamentType> TournamentTypes { get; set; }
         
     }
 }
