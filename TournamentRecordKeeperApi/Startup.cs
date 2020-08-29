@@ -110,6 +110,33 @@ namespace TournamentRecordKeeperApi
 
                 context.SaveChanges();
 
+                if (context.tournamentTypes.Count() == 0)
+                {
+                    context.tournamentTypes.Add(new Models.TournamentType
+                    {
+                        Name = "Round-robin (all-play-all)",
+                        Description = "A round-robin tournament (or all-play-all tournament) is a competition in which each contestant meets all other " +
+                        "contestants in turn. A round-robin contrasts with an elimination tournament, in which participants are eliminated after a " +
+                        "certain number of losses."
+                    });
+
+                    context.tournamentTypes.Add(new Models.TournamentType
+                    {
+                        Name = "Elimination",
+                        Description = "A competition in which only the winners of each stage play in the next stage, until one competitor or team is the final winner."
+                    });
+
+                    context.tournamentTypes.Add(new Models.TournamentType
+                    {
+                        Name = "Ladder",
+                        Description = "A tournament in which the entrants are listed by name and rank, advancement being by means of challenging and " +
+                        "defeating an entrant ranked one or two places higher."
+                    });
+
+                }
+
+                context.SaveChanges();
+
             }
 
             if (env.IsDevelopment())
