@@ -30,5 +30,7 @@ namespace TournamentRecordKeeperApi.Controllers
             return _context.GameMatches.Include(gm=>gm.game).AsEnumerable().Where(g=>(DateTime.Now-g.MatchDate).Days<=90).ToList();
         }
 
+       
+
     }
 }

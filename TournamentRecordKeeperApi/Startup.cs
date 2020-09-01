@@ -73,42 +73,7 @@ namespace TournamentRecordKeeperApi
                     
                 }
                 context.SaveChanges();
-
-                if (context.GameMatches.Count() == 0)
-                {
-                    context.GameMatches.Add(new Models.GameMatch
-                    {
-                        MatchDate = new DateTime(2020, 03, 06),
-                        game = context.Games.SingleOrDefault(game => game.ID == 1)
-                    });
-
-                    context.GameMatches.Add(new Models.GameMatch
-                    {
-                        MatchDate = new DateTime(2020, 08, 10),
-                        game = context.Games.SingleOrDefault(game => game.ID == 2)
-
-                    });
-
-                }
-                context.SaveChanges();
-
-                if (context.Tournaments.Count() == 0)
-                {
-                    context.Tournaments.Add(new Models.Tournament
-                    {
-                        tournamentType = context.TournamentTypes.SingleOrDefault(type => type.ID == 1),
-                        Name = "TournamentOne"
-                    }); 
-
-                    context.Tournaments.Add(new Models.Tournament
-                    {
-                        tournamentType = context.TournamentTypes.SingleOrDefault(type => type.ID == 2),
-                        Name = "TournamentTwo"
-                    });
-
-                }               
-
-                context.SaveChanges();
+                
 
                 if (context.TournamentTypes.Count() == 0)
                 {
@@ -135,6 +100,43 @@ namespace TournamentRecordKeeperApi
 
                 }
 
+                context.SaveChanges();
+
+                if (context.Tournaments.Count() == 0)
+                {
+                    context.Tournaments.Add(new Models.Tournament
+                    {
+                        tournamentType = context.TournamentTypes.SingleOrDefault(type => type.ID == 1),
+                        Name = "TournamentOne"
+                    });
+
+                    context.Tournaments.Add(new Models.Tournament
+                    {
+                        tournamentType = context.TournamentTypes.SingleOrDefault(type => type.ID == 2),
+                        Name = "TournamentTwo"
+                    });
+
+                }
+
+                context.SaveChanges();
+                if (context.GameMatches.Count() == 0)
+                {
+                    context.GameMatches.Add(new Models.GameMatch
+                    {
+                        MatchDate = new DateTime(2020, 03, 06),
+                        game = context.Games.SingleOrDefault(game => game.ID == 1),
+                        tournament = context.Tournaments.SingleOrDefault(t => t.ID == 1)
+                    });
+
+                    context.GameMatches.Add(new Models.GameMatch
+                    {
+                        MatchDate = new DateTime(2020, 08, 10),
+                        game = context.Games.SingleOrDefault(game => game.ID == 2),
+                        tournament = context.Tournaments.SingleOrDefault(t => t.ID == 2)
+
+                    });
+
+                }
                 context.SaveChanges();
 
             }
