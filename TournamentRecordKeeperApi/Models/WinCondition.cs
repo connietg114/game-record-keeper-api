@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace TournamentRecordKeeperApi.Models
 {
-    public class BestOf
+    public class WinCondition
     {
         public int ID { get; set; }
-        public GameMode gameMode { get; set; }
-        public int Win { get; set; }
-        public int NumberOfMatches { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

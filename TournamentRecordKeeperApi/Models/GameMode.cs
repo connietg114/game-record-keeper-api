@@ -10,7 +10,7 @@ namespace TournamentRecordKeeperApi.Models
         public int ID { get; set; }
         public Game game { get; set; }
         public string Name { get; set; }
-        public int WinCondition { get; set; }
+        public WinCondition winCondition { get; set; }
 
     }
 }

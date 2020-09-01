@@ -8,7 +8,7 @@ namespace TournamentRecordKeeperApi.Models
     public class Survival
     {
         public int ID { get; set; }
-        public virtual GameMode gameMode { get; set; }
+        public GameMode gameMode { get; set; }
         public int Threshold { get; set; }
     }
 }

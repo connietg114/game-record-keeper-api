@@ -10,5 +10,6 @@ namespace TournamentRecordKeeperApi.Models
         public int ID { get; set; }
         public DateTime MatchDate { get; set; }
         public Game game { get; set; }
+        public Tournament tournament { get; set; }
     }
 }
