@@ -27,10 +27,17 @@ namespace TournamentRecordKeeperApi.Controllers
 
         public IEnumerable<GameMatch> Get()
         {
-            return _context.GameMatches.Include(gm=>gm.game).AsEnumerable().Where(g=>(DateTime.Now-g.MatchDate).Days<=90).ToList();
+            return _context.GameMatches.Include(gm=>gm.game).Include(gm=>gm.tournament).AsEnumerable().Where(g=>(DateTime.Now-g.MatchDate).Days<=90).ToList();
         }
 
-       
+        [HttpGet]
+        [Route("allmatches")]
+        public IEnumerable<GameMatch> GetAllMatches()
+        {
+            return _context.GameMatches.Include(gm => gm.game).Include(gm => gm.tournament).ToList();
+        }
+
+
 
     }
 }
