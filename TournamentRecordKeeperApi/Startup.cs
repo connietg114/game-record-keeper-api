@@ -102,6 +102,8 @@ namespace TournamentRecordKeeperApi
 
                 context.SaveChanges();
 
+                if (context.GameMatches.Count() == 0)
+
                 {
                     context.GameMatches.Add(new Models.GameMatch
                     {
@@ -127,13 +129,13 @@ namespace TournamentRecordKeeperApi
                     {
                         Name = "TournamentOne",
                         tournamentType = context.TournamentTypes.SingleOrDefault(tt => tt.Name == "Ladder")
-                });
+                    });
 
                     context.Tournaments.Add(new Models.Tournament
                     {
                         Name = "TournamentTwo",
                         tournamentType = context.TournamentTypes.SingleOrDefault(tt => tt.Name == "Round-robin (all-play-all)")
-            });
+                    });
 
                 }
 
