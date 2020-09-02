@@ -46,9 +46,12 @@ namespace TournamentRecordKeeperApi.Controllers
                 tournaments = tournaments.Where(t => t.EndDate == endDate);
             }
 
+
             return Ok(
-                tournaments.ToList()
+                tournaments.Include(z => z.tournamentType).ToList()
                 );
         }
+
+       
     }
 }

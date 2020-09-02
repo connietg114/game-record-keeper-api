@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using TournamentRecordKeeperApi.Data;
 using Newtonsoft;
-
+using TournamentRecordKeeperApi.Models;
 
 namespace TournamentRecordKeeperApi
 {
@@ -92,24 +92,6 @@ namespace TournamentRecordKeeperApi
                 }
                 context.SaveChanges();
 
-                if (context.Tournaments.Count() == 0)
-                {
-                    context.Tournaments.Add(new Models.Tournament
-                    {
-                        tournamentType = context.TournamentTypes.SingleOrDefault(type => type.ID == 1),
-                        Name = "TournamentOne"
-                    }); 
-
-                    context.Tournaments.Add(new Models.Tournament
-                    {
-                        tournamentType = context.TournamentTypes.SingleOrDefault(type => type.ID == 2),
-                        Name = "TournamentTwo"
-                    });
-
-                }               
-
-                context.SaveChanges();
-
                 if (context.TournamentTypes.Count() == 0)
                 {
                     context.TournamentTypes.Add(new Models.TournamentType
@@ -137,6 +119,29 @@ namespace TournamentRecordKeeperApi
 
                 context.SaveChanges();
 
+                if (context.Tournaments.Count() == 0)
+                {
+                    context.Tournaments.Add(new Models.Tournament
+                    {
+                        Name = "TournamentOne",
+                        tournamentType = context.TournamentTypes.SingleOrDefault(tt => tt.Name == "Ladder")
+                });
+
+                    context.Tournaments.Add(new Models.Tournament
+                    {
+                        Name = "TournamentTwo",
+                        tournamentType = context.TournamentTypes.SingleOrDefault(tt => tt.Name == "Round-robin (all-play-all)")
+            });
+
+                }
+
+                context.SaveChanges();
+                foreach ( var entity in context.Tournaments.Include(z => z.tournamentType).Where(z => z.tournamentType == null).ToList())
+                {
+                    entity.tournamentType = context.TournamentTypes.SingleOrDefault(tt => tt.Name == "Ladder");
+                }
+
+                context.SaveChanges();
             }
 
             if (env.IsDevelopment())
