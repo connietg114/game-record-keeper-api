@@ -58,8 +58,7 @@ namespace TournamentRecordKeeperApi
                if (context.Games.Count() == 0)
                 {
                     context.Games.Add(new Models.Game
-                    {
-                        Name = "Catan",
+                    { Name = "Catan",
                         MinPlayerCount = 2,
                         MaxPlayerCount = 4
                     });
@@ -143,6 +142,35 @@ namespace TournamentRecordKeeperApi
                 foreach ( var entity in context.Tournaments.Include(z => z.tournamentType).Where(z => z.tournamentType == null).ToList())
                 {
                     entity.tournamentType = context.TournamentTypes.SingleOrDefault(tt => tt.Name == "Ladder");
+                }
+
+                context.SaveChanges();
+
+                if (context.WinConditions.Count() == 0)
+                {
+                    context.WinConditions.Add(new Models.WinCondition
+                    {
+                        Name = "Best Of",
+                        Description = "Number of best teams/players out of the number of matches. For example, it can be best 2 out of 3 matches."
+                    });
+
+                    context.WinConditions.Add(new Models.WinCondition
+                    {
+                        Name = "First Of",
+                        Description = "First teams/players to achieve some goals. For example, it can be first to get to 20 points."
+                    });
+
+                    context.WinConditions.Add(new Models.WinCondition
+                    {
+                        Name = "Survival",
+                        Description = "It records who is the last to be eliminated from the game."
+                    });
+
+                    context.WinConditions.Add(new Models.WinCondition
+                    {
+                        Name = "Highest Score",
+                        Description = "Which team/player obtain the hightst score."
+                    });
                 }
 
                 context.SaveChanges();

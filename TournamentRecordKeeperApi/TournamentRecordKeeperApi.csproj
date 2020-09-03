@@ -24,5 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Data\gameContext.cs" />
+    <Compile Remove="Migrations\20200903053118_InitializeWinConditionTable.cs" />
+    <Compile Remove="Migrations\20200903053118_InitializeWinConditionTable.Designer.cs" />
   </ItemGroup>
 </Project>
