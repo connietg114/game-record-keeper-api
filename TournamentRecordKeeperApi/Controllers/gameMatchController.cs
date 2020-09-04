@@ -25,15 +25,22 @@ namespace TournamentRecordKeeperApi.Controllers
 
         [HttpGet]
 
-        public IEnumerable<GameMatch> Get()
-        {
+        public IEnumerable<GameMatch> Get(int? id = null)
+        {   if (id != null)
+            {
+                return _context.GameMatches.Include(gm => gm.game).Include(gm => gm.tournament).Include(gm => gm.tournament.tournamentType).Where(g => ((DateTime.Now - g.MatchDate).Days <= 90) && g.ID == id).ToList();
+            }
             return _context.GameMatches.Include(gm=>gm.game).Include(gm=>gm.tournament).Include(gm=>gm.tournament.tournamentType).AsEnumerable().Where(g=>(DateTime.Now-g.MatchDate).Days<=90).ToList();
         }
-
+        
         [HttpGet]
         [Route("allmatches")]
-        public IEnumerable<GameMatch> GetAllMatches()
+        public IEnumerable<GameMatch> GetAllMatches(int? id = null)
         {
+            if (id != null)
+            {
+                return _context.GameMatches.Include(gm => gm.game).Include(gm => gm.tournament).Include(gm => gm.tournament.tournamentType).Where(g => g.ID == id).ToList();
+            }
             return _context.GameMatches.Include(gm => gm.game).Include(gm => gm.tournament).Include(gm => gm.tournament.tournamentType).ToList();
         }
 
