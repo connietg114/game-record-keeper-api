@@ -122,6 +122,7 @@ namespace TournamentRecordKeeperApi
                 }
                 context.SaveChanges();
 
+
                 if (context.Tournaments.Count() == 0)
                 {
                     context.Tournaments.Add(new Models.Tournament
@@ -142,6 +143,14 @@ namespace TournamentRecordKeeperApi
                 foreach ( var entity in context.Tournaments.Include(z => z.tournamentType).Where(z => z.tournamentType == null).ToList())
                 {
                     entity.tournamentType = context.TournamentTypes.SingleOrDefault(tt => tt.Name == "Ladder");
+                }
+
+
+                context.SaveChanges();
+
+                foreach (var entity in context.GameMatches.Include(gm => gm.tournament).Where(gm => gm.tournament == null).ToList())
+                {
+                    entity.tournament = context.Tournaments.SingleOrDefault(t => t.ID == 2);
                 }
 
                 context.SaveChanges();
