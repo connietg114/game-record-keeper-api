@@ -145,12 +145,26 @@ namespace TournamentRecordKeeperApi
                     entity.tournamentType = context.TournamentTypes.SingleOrDefault(tt => tt.Name == "Ladder");
                 }
 
-
+                
                 context.SaveChanges();
 
                 foreach (var entity in context.GameMatches.Include(gm => gm.tournament).Where(gm => gm.tournament == null).ToList())
                 {
                     entity.tournament = context.Tournaments.SingleOrDefault(t => t.ID == 2);
+                }
+
+                context.SaveChanges();
+
+                foreach (var entity in context.Tournaments.ToList())
+                {
+                    entity.StartDate = new DateTime(2020, 08, 23);
+                }
+
+                context.SaveChanges();
+
+                foreach (var entity in context.Tournaments.ToList())
+                {
+                    entity.EndDate = new DateTime(2020, 09, 01);
                 }
 
                 context.SaveChanges();

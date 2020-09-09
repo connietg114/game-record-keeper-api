@@ -20,6 +20,8 @@ namespace TournamentRecordKeeperApi.Controllers
             _Context = context;
         }
 
+        
+
         [HttpGet]
         public IActionResult Get(int? id = null, string name = null, DateTime? startDate = null,
             DateTime? endDate = null, int? tournamentType = null)
