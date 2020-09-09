@@ -157,7 +157,7 @@ namespace TournamentRecordKeeperApi
 
                 foreach (var entity in context.Tournaments.ToList())
                 {
-                    entity.StartDate = new DateTime(2020, 08, 23);
+                    entity.StartDate = new DateTime(2020, 08, 10);
                 }
 
                 context.SaveChanges();

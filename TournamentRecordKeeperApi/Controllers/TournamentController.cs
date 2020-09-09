@@ -20,38 +20,26 @@ namespace TournamentRecordKeeperApi.Controllers
             _Context = context;
         }
 
-        
-
         [HttpGet]
-        public IActionResult Get(int? id = null, string name = null, DateTime? startDate = null,
-            DateTime? endDate = null, int? tournamentType = null)
+        public IEnumerable<Tournament> Get(int? id = null)
         {
-            IQueryable<Tournament> tournaments = _Context.Set<Tournament>();
-
             if (id != null)
             {
-                tournaments = tournaments.Where(t => t.ID == id);
+                return _Context.Tournaments.Include(t => t.tournamentType).Where(t => ((DateTime.Now - t.StartDate).Days <= 90) && t.ID == id).ToList();
             }
+            return _Context.Tournaments.Include(t => t.tournamentType).AsEnumerable().Where(t => ((DateTime.Now - t.StartDate).Days <= 90)).ToList();
+        }
 
-            if (!string.IsNullOrEmpty(name))
+
+        [HttpGet]
+        [Route("allTournament")]
+        public IEnumerable<Tournament> GetAllTournaments(int? id = null)
+        {
+            if (id != null)
             {
-                tournaments = tournaments.Where(t => t.Name == name);
+                return _Context.Tournaments.Include(t => t.tournamentType).Where(t => t.ID == id).ToList();
             }
-
-            if (startDate != null)
-            {
-                tournaments = tournaments.Where(t => t.StartDate == startDate);
-            }
-
-            if (endDate != null)
-            {
-                tournaments = tournaments.Where(t => t.EndDate == endDate);
-            }
-
-
-            return Ok(
-                tournaments.Include(z => z.tournamentType).ToList()
-                );
+            return _Context.Tournaments.Include(t => t.tournamentType).ToList();
         }
 
        
