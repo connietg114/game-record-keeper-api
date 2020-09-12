@@ -197,7 +197,26 @@ namespace TournamentRecordKeeperApi
                 }
 
                 context.SaveChanges();
+                if (context.GameModes.Count() == 0)
+                {
+                    context.GameModes.Add(new GameMode
+                    {
+                        game = context.Games.SingleOrDefault(g => g.ID == 1),
+                        Name = "GameMode1",
+                        winCondition = context.WinConditions.SingleOrDefault(w=>w.ID==1)
+
+                    });
+                    context.GameModes.Add(new GameMode
+                    {
+                        game = context.Games.SingleOrDefault(g => g.ID == 1),
+                        Name = "GameMode2",
+                        winCondition = context.WinConditions.SingleOrDefault(w => w.ID == 2)
+
+                    });
+                }
+                context.SaveChanges();
             }
+            
 
             if (env.IsDevelopment())
             {

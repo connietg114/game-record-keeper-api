@@ -25,17 +25,25 @@ namespace TournamentRecordKeeperApi.Controllers
 
         //https://localhost:5001/game/
         [HttpGet]
-        public IEnumerable<Game> Get()
+        public ActionResult Get()
         {
-            return _context.Games.ToList();
+            return Ok(_context.Games.Select(g => new  {
+                id = g.ID,
+                name = g.Name,
+                minPlayerCount = g.MinPlayerCount,
+                maxPlayerCount = g.MaxPlayerCount,
+                gameModes = g.GameModes.Count
+            }).ToList());
         }
-
 
         [HttpGet]
         [Route("getGames")]
-        public IEnumerable<Game> Get(string i)
+        public ActionResult Get(string i)
         {
-            return _context.Games.Where(u => u.Name == i).ToList();
+            if (string.IsNullOrEmpty(i))
+                return BadRequest("i not provided.");
+
+            return Ok(_context.Games.Where(u => u.Name == i).ToList());
         }
 
         [HttpPost]

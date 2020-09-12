@@ -11,5 +11,6 @@ namespace TournamentRecordKeeperApi.Models
         public string Name { get; set; }
         public int MinPlayerCount { get; set; }
         public int MaxPlayerCount { get; set; }
+        public List<GameMode> GameModes { get; set; }
     }
 }
