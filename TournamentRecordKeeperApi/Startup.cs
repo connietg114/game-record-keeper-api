@@ -73,7 +73,7 @@ namespace TournamentRecordKeeperApi
                     { Name = "Catan",
                         MinPlayerCount = 2,
                         MaxPlayerCount = 4
-                        //GameModes = context.GameModes.Where(gm=>gm.game.ID==1).ToList()
+                       
                     });
 
                     context.Games.Add(new Models.Game
@@ -81,7 +81,7 @@ namespace TournamentRecordKeeperApi
                         Name = "Star Realms",
                         MinPlayerCount = 1,
                         MaxPlayerCount = 4
-                        //GameModes = context.GameModes.Where(gm => gm.game.ID == 1).ToList()
+                       
                     });
                     
                 }

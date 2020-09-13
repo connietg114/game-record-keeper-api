@@ -56,6 +56,7 @@ namespace TournamentRecordKeeperApi.Controllers
                 .Include(gm => gm.game)
                 .Include(gm => gm.tournament)
                 .Include(gm => gm.tournament.tournamentType)
+                .Include(gm => gm.game.GameModes).ThenInclude(gm => gm.winCondition)
                 .SingleOrDefault(g => g.ID == id));
         }
 
