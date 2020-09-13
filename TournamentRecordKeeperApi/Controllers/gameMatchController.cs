@@ -24,8 +24,6 @@ namespace TournamentRecordKeeperApi.Controllers
         }
 
         [HttpGet]
-
-
         public ActionResult Get(DateTime? startDate = null, DateTime? endDate = null)
         {
             var gameMatches = _context.GameMatches
@@ -43,22 +41,23 @@ namespace TournamentRecordKeeperApi.Controllers
             {
                 gameMatches = gameMatches.Where(g => g.MatchDate > endDate);
             }
-
             return Ok(gameMatches.ToList());
         }
         
         [HttpGet]
-        [Route("allmatches")]
-        public ActionResult GetAllMatches(int? id = null)
+        [Route("getGameMatchDetails")]
+        public ActionResult GetGameMatchDetails(int? id = null)
         {
-            if (id != null)
+            if (id == null)
             {
-                return Ok(_context.GameMatches.Include(gm => gm.game).Include(gm => gm.tournament).Include(gm => gm.tournament.tournamentType).Where(g => g.ID == id).ToList());
+                return BadRequest("Game Match ID is not provided");
             }
-            return Ok(_context.GameMatches.Include(gm => gm.game).Include(gm => gm.tournament).Include(gm => gm.tournament.tournamentType).ToList());
+            return Ok(_context.GameMatches
+                .Include(gm => gm.game)
+                .Include(gm => gm.tournament)
+                .Include(gm => gm.tournament.tournamentType)
+                .SingleOrDefault(g => g.ID == id));
         }
-
-
 
     }
 }
