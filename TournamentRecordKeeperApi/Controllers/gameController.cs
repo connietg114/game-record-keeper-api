@@ -23,27 +23,28 @@ namespace TournamentRecordKeeperApi.Controllers
             _context = context;
         }
 
-        //https://localhost:5001/game/
         [HttpGet]
         public ActionResult Get()
         {
-            return Ok(_context.Games.Select(g => new  {
-                id = g.ID,
-                name = g.Name,
-                minPlayerCount = g.MinPlayerCount,
-                maxPlayerCount = g.MaxPlayerCount,
-                gameModes = g.GameModes.Count
-            }).ToList());
+            return Ok(_context.Games.Select(g => new {
+                    id = g.ID,
+                    name = g.Name,
+                    minPlayerCount = g.MinPlayerCount,
+                    maxPlayerCount = g.MaxPlayerCount,
+                    gameModes = g.GameModes.Count
+                }).ToList());       
         }
 
         [HttpGet]
-        [Route("getGames")]
-        public ActionResult Get(string i)
+        [Route("getGameDetails")]
+        public ActionResult GetGames(int? id = null)
         {
-            if (string.IsNullOrEmpty(i))
-                return BadRequest("i not provided.");
-
-            return Ok(_context.Games.Where(u => u.Name == i).ToList());
+            if (id == null)
+            {
+                return BadRequest("Game ID is not provided");
+                
+            }
+            return Ok(_context.Games.Include(g => g.GameModes).SingleOrDefault(g => g.ID == id));
         }
 
         [HttpPost]

@@ -11,8 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using TournamentRecordKeeperApi.Data;
-using Newtonsoft;
 using TournamentRecordKeeperApi.Models;
 
 namespace TournamentRecordKeeperApi
@@ -44,7 +44,9 @@ namespace TournamentRecordKeeperApi
                     });
             });
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +63,7 @@ namespace TournamentRecordKeeperApi
                     { Name = "Catan",
                         MinPlayerCount = 2,
                         MaxPlayerCount = 4
+                        //GameModes = context.GameModes.Where(gm=>gm.game.ID==1).ToList()
                     });
 
                     context.Games.Add(new Models.Game
@@ -68,6 +71,7 @@ namespace TournamentRecordKeeperApi
                         Name = "Star Realms",
                         MinPlayerCount = 1,
                         MaxPlayerCount = 4
+                        //GameModes = context.GameModes.Where(gm => gm.game.ID == 1).ToList()
                     });
                     
                 }
@@ -203,7 +207,8 @@ namespace TournamentRecordKeeperApi
                     {
                         game = context.Games.SingleOrDefault(g => g.ID == 1),
                         Name = "GameMode1",
-                        winCondition = context.WinConditions.SingleOrDefault(w=>w.ID==1)
+                        winCondition = context.WinConditions.SingleOrDefault(w=>w.ID==1),
+                        
 
                     });
                     context.GameModes.Add(new GameMode

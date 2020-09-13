@@ -26,12 +26,25 @@ namespace TournamentRecordKeeperApi.Controllers
         [HttpGet]
 
 
-        public ActionResult Get(int? id = null)
-        {   if (id != null)
+        public ActionResult Get(DateTime? startDate = null, DateTime? endDate = null)
+        {
+            var gameMatches = _context.GameMatches
+                .Include(gm => gm.game)
+                .Include(gm => gm.tournament)
+                .Include(gm => gm.tournament.tournamentType)
+                .AsQueryable();
+
+            if (startDate != null)
             {
-                return Ok (_context.GameMatches.Include(gm => gm.game).Include(gm => gm.tournament).Include(gm => gm.tournament.tournamentType).Where(g => ((DateTime.Now - g.MatchDate).Days <= 90) && g.ID == id).ToList());
+                gameMatches = gameMatches.Where(g => g.MatchDate > startDate);
             }
-            return Ok(_context.GameMatches.Include(gm=>gm.game).Include(gm=>gm.tournament).Include(gm=>gm.tournament.tournamentType).AsEnumerable().Where(g=>(DateTime.Now-g.MatchDate).Days<=90).ToList());
+
+            if (endDate != null)
+            {
+                gameMatches = gameMatches.Where(g => g.MatchDate > endDate);
+            }
+
+            return Ok(gameMatches.ToList());
         }
         
         [HttpGet]
