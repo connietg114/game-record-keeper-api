@@ -44,7 +44,10 @@ namespace TournamentRecordKeeperApi.Controllers
                 return BadRequest("Game ID is not provided");
                 
             }
-            return Ok(_context.Games.Include(g => g.GameModes).SingleOrDefault(g => g.ID == id));
+            return Ok(_context.Games
+                .Include(g => g.GameModes)
+                .Include(g => g.GameModes).ThenInclude(gm=>gm.winCondition)
+                .SingleOrDefault(g => g.ID == id));
         }
 
         [HttpPost]
