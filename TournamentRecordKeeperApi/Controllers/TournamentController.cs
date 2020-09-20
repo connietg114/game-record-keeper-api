@@ -20,28 +20,38 @@ namespace TournamentRecordKeeperApi.Controllers
             _Context = context;
         }
 
-        [HttpGet]
-        public IEnumerable<Tournament> Get(int? id = null)
-        {
-            if (id != null)
-            {
-                return _Context.Tournaments.Include(t => t.tournamentType).Where(t => ((DateTime.Now - t.StartDate).Days <= 90) && t.ID == id).ToList();
-            }
-            return _Context.Tournaments.Include(t => t.tournamentType).AsEnumerable().Where(t => ((DateTime.Now - t.StartDate).Days <= 90)).ToList();
-        }
-
 
         [HttpGet]
-        [Route("allTournament")]
-        public IEnumerable<Tournament> GetAllTournaments(int? id = null)
+        public ActionResult Get(DateTime? startDate = null, DateTime? endDate = null)
         {
-            if (id != null)
+            var tournaments = _Context.Tournaments
+                .Include(t => t.tournamentType)
+                .AsQueryable();
+
+            if (startDate != null)
             {
-                return _Context.Tournaments.Include(t => t.tournamentType).Where(t => t.ID == id).ToList();
+                tournaments = tournaments.Where(t => t.StartDate > startDate);
             }
-            return _Context.Tournaments.Include(t => t.tournamentType).ToList();
+
+            if (endDate != null)
+            {
+                tournaments = tournaments.Where(t => t.EndDate > endDate);
+            }
+
+            return Ok(tournaments.ToList());
         }
 
-       
+        [HttpGet]
+        [Route("getTournamentDetails")]
+        public ActionResult GetTournamentDetails(int? id = null)
+        {
+            if (id == null)
+            {
+                return BadRequest("Tournament ID is not provided");
+            }
+
+            return Ok(_Context.Tournaments.Include(t => t.tournamentType).SingleOrDefault(t => t.ID == id));
+        }
+
     }
 }
