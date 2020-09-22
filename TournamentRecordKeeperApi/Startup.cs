@@ -41,7 +41,8 @@ namespace TournamentRecordKeeperApi
                     builder =>
                     {
                         builder.AllowAnyOrigin()
-                            .AllowAnyHeader();
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
                     });
             });
 
