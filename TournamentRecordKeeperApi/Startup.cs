@@ -63,18 +63,50 @@ namespace TournamentRecordKeeperApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            InitializeDatabase(app);
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "GameRecordKeeper API V1");
+                c.RoutePrefix = string.Empty;
+            });
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseCors("MyOrigins");
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
+
+        private static void InitializeDatabase(IApplicationBuilder app)
+        {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<appContext>();
                 context.Database.Migrate();
 
-               if (context.Games.Count() == 0)
+                if (context.Games.Count() == 0)
                 {
                     context.Games.Add(new Models.Game
-                    { Name = "Catan",
+                    {
+                        Name = "Catan",
                         MinPlayerCount = 2,
                         MaxPlayerCount = 4
-                       
+
                     });
 
                     context.Games.Add(new Models.Game
@@ -82,12 +114,12 @@ namespace TournamentRecordKeeperApi
                         Name = "Star Realms",
                         MinPlayerCount = 1,
                         MaxPlayerCount = 4
-                       
+
                     });
-                    
+
                 }
                 context.SaveChanges();
-                
+
 
                 if (context.TournamentTypes.Count() == 0)
                 {
@@ -155,12 +187,12 @@ namespace TournamentRecordKeeperApi
                 }
 
                 context.SaveChanges();
-                foreach ( var entity in context.Tournaments.Include(z => z.tournamentType).Where(z => z.tournamentType == null).ToList())
+                foreach (var entity in context.Tournaments.Include(z => z.tournamentType).Where(z => z.tournamentType == null).ToList())
                 {
                     entity.tournamentType = context.TournamentTypes.SingleOrDefault(tt => tt.Name == "Ladder");
                 }
 
-                
+
                 context.SaveChanges();
 
                 foreach (var entity in context.GameMatches.Include(gm => gm.tournament).Where(gm => gm.tournament == null).ToList())
@@ -218,8 +250,8 @@ namespace TournamentRecordKeeperApi
                     {
                         game = context.Games.SingleOrDefault(g => g.ID == 1),
                         Name = "GameMode1",
-                        winCondition = context.WinConditions.SingleOrDefault(w=>w.ID==1),
-                        
+                        winCondition = context.WinConditions.SingleOrDefault(w => w.ID == 1),
+
 
                     });
                     context.GameModes.Add(new GameMode
@@ -234,33 +266,6 @@ namespace TournamentRecordKeeperApi
 
 
             }
-            
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "GameRecordKeeper API V1");
-                c.RoutePrefix = string.Empty;
-            });
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseCors("MyOrigins");
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
         }
     }
 }
