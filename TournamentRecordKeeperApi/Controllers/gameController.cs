@@ -51,7 +51,7 @@ namespace TournamentRecordKeeperApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult post(Game item)
+        public IActionResult Post(Game item)
         {
             //if (!ModelState.IsValid)
             //    return BadRequest("Not a valid model");
@@ -63,7 +63,7 @@ namespace TournamentRecordKeeperApi.Controllers
 
             _context.Games.Add(new Game()
             {
-               
+
                 Name = item.Name,
                 MinPlayerCount = item.MinPlayerCount,
                 MaxPlayerCount = item.MaxPlayerCount
@@ -71,8 +71,41 @@ namespace TournamentRecordKeeperApi.Controllers
             });
 
             _context.SaveChanges();
-            return Ok();
-        }       
+            return Ok(
+                new
+                {
+                    message = "OK"
+                });
+        }
+
+        [HttpDelete]
+        public ActionResult Delete(int? id=null)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    return BadRequest("Game not found");
+
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Not a valid model");
+                }
+
+                _context.Games.Remove(_context.Games.SingleOrDefault(g => g.ID == id));
+                _context.SaveChanges();
+                return Ok(new {
+                    message = "OK"
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+                //Value cannot be null. (Parameter 'entity')
+            }
+
+        }
 
 
     }
