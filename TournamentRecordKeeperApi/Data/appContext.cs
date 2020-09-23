@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using IdentityServer4.EntityFramework.Options;
 using TournamentRecordKeeperApi.Models;
 
 namespace TournamentRecordKeeperApi.Data
 {
-    public class appContext: DbContext
+    public class appContext : ApiAuthorizationDbContext<ApplicationUser>
     {
-        public appContext(DbContextOptions options) : base(options) { }
+        public appContext(
+            DbContextOptions options,
+            IOptions<OperationalStoreOptions> operationalStoreOptions)
+            : base(options, operationalStoreOptions)
+        {
+        }
 
         public DbSet<Game> Games { get; set; }
         public DbSet<GameMatch> GameMatches { get; set; }
