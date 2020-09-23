@@ -15,5 +15,8 @@ namespace TournamentRecordKeeperApi.Data
         public DbSet<GameMode> GameModes { get; set; }
         public DbSet<TournamentType> TournamentTypes { get; set; }
         public DbSet<WinCondition> WinConditions { get; set; }
+        public DbSet<FirstOf> FirstOf { get; set; }
+        public DbSet<BestOf> BestOf { get; set; }
+        public DbSet<Survival> Survivals { get; set; }
     }
 }
