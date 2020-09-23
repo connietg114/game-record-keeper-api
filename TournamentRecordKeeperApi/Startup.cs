@@ -58,8 +58,9 @@ namespace TournamentRecordKeeperApi
                     });
             });
 
-            services.AddControllers()
+            services.AddControllersWithViews()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddRazorPages();
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -104,6 +105,7 @@ namespace TournamentRecordKeeperApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
         }
 
