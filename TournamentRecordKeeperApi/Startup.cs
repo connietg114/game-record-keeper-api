@@ -19,7 +19,6 @@ using Newtonsoft.Json;
 using TournamentRecordKeeperApi.Data;
 using TournamentRecordKeeperApi.Models;
 
-
 namespace TournamentRecordKeeperApi
 {
     public class Startup
@@ -44,6 +43,23 @@ namespace TournamentRecordKeeperApi
                 .AddApiAuthorization<ApplicationUser, appContext>();
 
             services.AddAuthentication()
+                .AddOpenIdConnect(
+                    authenticationScheme: "modern-magic",
+                    displayName: "Modern Magic Identity",
+                    configureOptions: options =>
+                    {
+                        options.Authority = "https://localhost:44310/";
+                        options.RequireHttpsMetadata = false;
+
+                        options.ClientId = "game-record-keeper";
+                        options.ClientSecret = "game";
+                        options.ResponseType = "code";
+
+                        options.UsePkce = true;
+
+                        options.SaveTokens = true;
+                        options.GetClaimsFromUserInfoEndpoint = true;
+                    })
                 .AddIdentityServerJwt();
 
             services.AddCors(options =>
