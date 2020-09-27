@@ -18,6 +18,8 @@ using IdentityServer4;
 using Newtonsoft.Json;
 using TournamentRecordKeeperApi.Data;
 using TournamentRecordKeeperApi.Models;
+using Microsoft.Extensions.Options;
+using IdentityServer4.Models;
 
 namespace TournamentRecordKeeperApi
 {
@@ -33,6 +35,11 @@ namespace TournamentRecordKeeperApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var config = new RootConfiguration();
+
+            Configuration.GetSection(nameof(GameRecordKeeperApiConfiguration)).Bind(config.GameRecordKeeperApiConfiguration);
+            Configuration.GetSection(nameof(ModernMagicIdentityServerConfiguration)).Bind(config.ModernMagicIdentityServerConfiguration);
+
             services.AddDbContext<appContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
@@ -40,7 +47,8 @@ namespace TournamentRecordKeeperApi
                 .AddEntityFrameworkStores<appContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, appContext>();
+                .AddApiAuthorization<ApplicationUser, appContext>()
+                .AddInMemoryClients(Config.GetClients(config.GameRecordKeeperApiConfiguration));
 
             services.AddAuthentication()
                 .AddOpenIdConnect(
@@ -48,14 +56,16 @@ namespace TournamentRecordKeeperApi
                     displayName: "Modern Magic Identity",
                     configureOptions: options =>
                     {
-                        options.Authority = "https://localhost:44310/";
+                        var openIdConfig = config.ModernMagicIdentityServerConfiguration;
+
+                        options.Authority = openIdConfig?.ModernMagicIdentityServerBaseUrl;
                         options.RequireHttpsMetadata = false;
 
-                        options.ClientId = "game-record-keeper";
-                        options.ClientSecret = "game";
-                        options.ResponseType = "code";
+                        options.ClientId = openIdConfig.ClientId;
+                        options.ClientSecret = openIdConfig?.ClientSecret;
+                        options.ResponseType = openIdConfig?.ResponseType;
 
-                        options.UsePkce = true;
+                        options.UsePkce = openIdConfig?.UsePkce ?? false;
 
                         options.SaveTokens = true;
                         options.GetClaimsFromUserInfoEndpoint = true;
@@ -86,6 +96,37 @@ namespace TournamentRecordKeeperApi
                     Description = "API to retrieve and update records of games"
                 });
 
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri($"{config.GameRecordKeeperApiConfiguration?.GameRecordKeeperApiBaseUrl}/connect/authorize"),
+                            TokenUrl = new Uri($"{config.GameRecordKeeperApiConfiguration?.GameRecordKeeperApiBaseUrl}/connect/token"),
+                            Scopes = new Dictionary<string, string>
+                            {
+                                { "GameRecordKeeperAPI", "Game Record Keeping Operations" }
+                            }
+                        }
+                    }
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "oauth2"
+                            }
+                        },
+                        new[] { "GameRecordKeeperAPI" }
+                    }
+                });
             });
         }
 
@@ -105,6 +146,10 @@ namespace TournamentRecordKeeperApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "GameRecordKeeper API V1");
                 c.RoutePrefix = string.Empty;
+
+                c.OAuthClientId("game-record-keeper-swagger-ui");
+                c.OAuthClientSecret("game");
+                c.OAuthUsePkce();
             });
 
             app.UseHttpsRedirection();
@@ -114,8 +159,8 @@ namespace TournamentRecordKeeperApi
 
             app.UseCors("MyOrigins");
 
-            app.UseAuthentication();
             app.UseIdentityServer();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
