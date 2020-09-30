@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.Extensions.Options;
 using IdentityServer4.EntityFramework.Options;
 using TournamentRecordKeeperApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace TournamentRecordKeeperApi.Data
 {
