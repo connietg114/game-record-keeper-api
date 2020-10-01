@@ -11,6 +11,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TournamentRecordKeeperApi.Controllers
 {
+    public enum SortOrder
+    {
+        Ascending,
+        Desceding
+    }
+
+    public class SortDescription
+    {
+        public string FieldName { get; set; }
+        public int Priority { get; set; }
+        public SortOrder Direction { get; set; }
+    }
 
     [Route("api/[controller]")]
     [ApiController]
@@ -22,17 +34,44 @@ namespace TournamentRecordKeeperApi.Controllers
         {
             _context = context;
         }
-
+        //key=sort, value=gameID, Name
+        // page=?&rowsPerPage=?&sortBy=Name&SortDirection&Ascending&sortBy=Id&SortDirection=Desc
+        //[HttpPost]
+        //, List<string> filter = null, List<SortDescription> sort = null
         [HttpGet]
-        public ActionResult Get()
+        public ActionResult Get(int? page = null, int? rowsPerPage = null)
         {
-            return Ok(_context.Games.Select(g => new {
+            if (page == null && rowsPerPage == null)
+            {
+                return Ok(_context.Games.Select(g => new {
                     id = g.ID,
                     name = g.Name,
                     minPlayerCount = g.MinPlayerCount,
                     maxPlayerCount = g.MaxPlayerCount,
                     gameModes = g.GameModes.Count
-                }).ToList());       
+                }).ToList());
+            }
+
+            int pageNo = page.Value;
+            int rows = rowsPerPage.Value;
+            return Ok(new
+            {
+                games = _context.Games.AsQueryable()
+                .Skip(pageNo * rows)
+                .Take(rows)
+                .Select(g => new
+                {
+                    id = g.ID,
+                    name = g.Name,
+                    minPlayerCount = g.MinPlayerCount,
+                    maxPlayerCount = g.MaxPlayerCount,
+                    gameModes = g.GameModes.Count
+                }).ToList(),
+                total = _context.Games.Count()
+            });
+            
+
+
         }
 
         [HttpGet]
