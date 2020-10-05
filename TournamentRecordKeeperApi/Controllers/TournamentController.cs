@@ -53,5 +53,62 @@ namespace TournamentRecordKeeperApi.Controllers
             return Ok(_Context.Tournaments.Include(t => t.tournamentType).SingleOrDefault(t => t.ID == id));
         }
 
+
+        [HttpPut]
+        [Route("postNewTournament")]
+        public IActionResult PostNewTournament(Tournament tournament, int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid data.");
+            var type = _Context.TournamentTypes.SingleOrDefault(tt => tt.ID == id);
+            if (type == null)
+            {
+                return BadRequest("Tournament Type ID is not found");
+            }
+
+
+            _Context.Tournaments.Add(new Tournament()
+            {
+                Name = tournament.Name,
+                StartDate = tournament.StartDate,
+                EndDate = tournament.EndDate,
+                tournamentType = type
+            }); ;
+
+                _Context.SaveChanges();
+            
+
+
+            return Ok(
+                new
+                {
+                    message = "OK"
+                });
+        }
+
+        [HttpDelete]
+        [Route("deleteTournament")]
+        public IActionResult DeleteTournament(int? id = null)
+        {
+            if (id == null)
+            {
+                return BadRequest("Tournament ID is not provided");
+            }
+
+            var removeItem = _Context.Tournaments.SingleOrDefault(t => t.ID == id);
+
+            if (removeItem == null)
+            {
+                return BadRequest("Tournament ID is not found");
+            }
+
+            _Context.Remove(removeItem);
+            _Context.SaveChanges();
+
+            return Ok(new
+            {
+                message = "OK"
+            });
+        }
     }
 }
