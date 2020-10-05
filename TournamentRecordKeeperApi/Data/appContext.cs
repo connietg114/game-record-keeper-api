@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using IdentityServer4.EntityFramework.Options;
 using TournamentRecordKeeperApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace TournamentRecordKeeperApi.Data
 {

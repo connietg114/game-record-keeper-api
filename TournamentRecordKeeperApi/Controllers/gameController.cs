@@ -107,6 +107,45 @@ namespace TournamentRecordKeeperApi.Controllers
 
         }
 
+        [HttpDelete]
+        [Route("deleteMultipleGames")]
+        public ActionResult DeleteGames(int[] ids=null)
+        {
+            try
+            {
+                if (ids == null)
+                {
+                    return BadRequest("Games not found");
+
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Not a valid model");
+                }
+
+                foreach(int id in ids) 
+                {
+                   var item = _context.Games.SingleOrDefault(g => g.ID == id);
+                    if (item == null)
+                    {
+                        return BadRequest("Game not found");
+                    }
+                    _context.Games.Remove(item);
+                }
+                
+                _context.SaveChanges();
+                return Ok(new
+                {
+                    message = "OK"
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+               
+            }
+
+        }
 
     }
 }
