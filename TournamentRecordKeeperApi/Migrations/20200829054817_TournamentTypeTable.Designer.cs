@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TournamentRecordKeeperApi.Data;
+using GameRecordKeeper.Data;
 
-namespace TournamentRecordKeeperApi.Migrations
+namespace GameRecordKeeper.Migrations
 {
     [DbContext(typeof(appContext))]
     [Migration("20200829054817_TournamentTypeTable")]
@@ -21,7 +21,7 @@ namespace TournamentRecordKeeperApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.Game", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.Game", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -42,7 +42,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.GameMatch", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.GameMatch", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -62,7 +62,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("GameMatches");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.GameMode", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.GameMode", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -85,7 +85,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("GameModes");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.Tournament", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.Tournament", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -109,7 +109,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("Tournaments");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.TournamentType", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.TournamentType", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -127,16 +127,16 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("tournamentTypes");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.GameMatch", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.GameMatch", b =>
                 {
-                    b.HasOne("TournamentRecordKeeperApi.Models.Game", "game")
+                    b.HasOne("GameRecordKeeper.Models.Game", "game")
                         .WithMany()
                         .HasForeignKey("gameID");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.GameMode", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.GameMode", b =>
                 {
-                    b.HasOne("TournamentRecordKeeperApi.Models.Game", "game")
+                    b.HasOne("GameRecordKeeper.Models.Game", "game")
                         .WithMany()
                         .HasForeignKey("gameID");
                 });

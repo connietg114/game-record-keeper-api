@@ -1,6 +1,6 @@
 using System;
 
-namespace TournamentRecordKeeperApi
+namespace GameRecordKeeper
 {
     public class WeatherForecast
     {

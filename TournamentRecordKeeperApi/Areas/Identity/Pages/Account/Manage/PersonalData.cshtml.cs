@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using TournamentRecordKeeperApi.Models;
+using GameRecordKeeper.Models;
 
-namespace TournamentRecordKeeperApi.Areas.Identity.Pages.Account.Manage
+namespace GameRecordKeeper.Areas.Identity.Pages.Account.Manage
 {
     public class PersonalDataModel : PageModel
     {

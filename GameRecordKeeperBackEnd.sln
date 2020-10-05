@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TournamentRecordKeeperApi", "TournamentRecordKeeperApi\TournamentRecordKeeperApi.csproj", "{124879D7-02B8-4417-B15E-48C65ADA2321}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameRecordKeeper", "TournamentRecordKeeperApi\GameRecordKeeper.csproj", "{124879D7-02B8-4417-B15E-48C65ADA2321}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

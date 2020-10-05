@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TournamentRecordKeeperApi.Data;
+using GameRecordKeeper.Data;
 
-namespace TournamentRecordKeeperApi.Migrations
+namespace GameRecordKeeper.Migrations
 {
     [DbContext(typeof(appContext))]
     [Migration("20200923070001_Identity")]
@@ -238,7 +238,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.ApplicationUser", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -303,7 +303,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.BestOf", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.BestOf", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -326,7 +326,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("BestOf");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.FirstOf", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.FirstOf", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -346,7 +346,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("FirstOf");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.Game", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.Game", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -367,7 +367,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.GameMatch", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.GameMatch", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -392,7 +392,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("GameMatches");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.GameMode", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.GameMode", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -417,7 +417,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("GameModes");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.Survival", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.Survival", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -437,7 +437,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("Survivals");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.Tournament", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.Tournament", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -463,7 +463,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("Tournaments");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.TournamentType", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.TournamentType", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -481,7 +481,7 @@ namespace TournamentRecordKeeperApi.Migrations
                     b.ToTable("TournamentTypes");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.WinCondition", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.WinCondition", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -510,7 +510,7 @@ namespace TournamentRecordKeeperApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("TournamentRecordKeeperApi.Models.ApplicationUser", null)
+                    b.HasOne("GameRecordKeeper.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -519,7 +519,7 @@ namespace TournamentRecordKeeperApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("TournamentRecordKeeperApi.Models.ApplicationUser", null)
+                    b.HasOne("GameRecordKeeper.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -534,7 +534,7 @@ namespace TournamentRecordKeeperApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TournamentRecordKeeperApi.Models.ApplicationUser", null)
+                    b.HasOne("GameRecordKeeper.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -543,59 +543,59 @@ namespace TournamentRecordKeeperApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("TournamentRecordKeeperApi.Models.ApplicationUser", null)
+                    b.HasOne("GameRecordKeeper.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.BestOf", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.BestOf", b =>
                 {
-                    b.HasOne("TournamentRecordKeeperApi.Models.GameMode", "gameMode")
+                    b.HasOne("GameRecordKeeper.Models.GameMode", "gameMode")
                         .WithMany()
                         .HasForeignKey("gameModeID");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.FirstOf", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.FirstOf", b =>
                 {
-                    b.HasOne("TournamentRecordKeeperApi.Models.GameMode", "gameMode")
+                    b.HasOne("GameRecordKeeper.Models.GameMode", "gameMode")
                         .WithMany()
                         .HasForeignKey("gameModeID");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.GameMatch", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.GameMatch", b =>
                 {
-                    b.HasOne("TournamentRecordKeeperApi.Models.Game", "game")
+                    b.HasOne("GameRecordKeeper.Models.Game", "game")
                         .WithMany()
                         .HasForeignKey("gameID");
 
-                    b.HasOne("TournamentRecordKeeperApi.Models.Tournament", "tournament")
+                    b.HasOne("GameRecordKeeper.Models.Tournament", "tournament")
                         .WithMany()
                         .HasForeignKey("tournamentID");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.GameMode", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.GameMode", b =>
                 {
-                    b.HasOne("TournamentRecordKeeperApi.Models.Game", "game")
+                    b.HasOne("GameRecordKeeper.Models.Game", "game")
                         .WithMany("GameModes")
                         .HasForeignKey("gameID");
 
-                    b.HasOne("TournamentRecordKeeperApi.Models.WinCondition", "winCondition")
+                    b.HasOne("GameRecordKeeper.Models.WinCondition", "winCondition")
                         .WithMany()
                         .HasForeignKey("winConditionID");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.Survival", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.Survival", b =>
                 {
-                    b.HasOne("TournamentRecordKeeperApi.Models.GameMode", "gameMode")
+                    b.HasOne("GameRecordKeeper.Models.GameMode", "gameMode")
                         .WithMany()
                         .HasForeignKey("gameModeID");
                 });
 
-            modelBuilder.Entity("TournamentRecordKeeperApi.Models.Tournament", b =>
+            modelBuilder.Entity("GameRecordKeeper.Models.Tournament", b =>
                 {
-                    b.HasOne("TournamentRecordKeeperApi.Models.TournamentType", "tournamentType")
+                    b.HasOne("GameRecordKeeper.Models.TournamentType", "tournamentType")
                         .WithMany()
                         .HasForeignKey("tournamentTypeID");
                 });

@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using TournamentRecordKeeperApi.Models;
+using GameRecordKeeper.Models;
 
-namespace TournamentRecordKeeperApi.Areas.Identity.Pages.Account.Manage
+namespace GameRecordKeeper.Areas.Identity.Pages.Account.Manage
 {
     public partial class EmailModel : PageModel
     {

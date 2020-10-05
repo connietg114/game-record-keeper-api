@@ -4,16 +4,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TournamentRecordKeeperApi.Models;
-using TournamentRecordKeeperApi.Data;
+using GameRecordKeeper.Models;
+using GameRecordKeeper.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using static IdentityServer4.IdentityServerConstants;
 
-
-namespace TournamentRecordKeeperApi.Controllers
+namespace GameRecordKeeper.Controllers
 {
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class gameController : ControllerBase
     {
         private readonly appContext _context;

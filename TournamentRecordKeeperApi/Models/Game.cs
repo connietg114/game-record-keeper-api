@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TournamentRecordKeeperApi.Models
+namespace GameRecordKeeper.Models
 {
     public class Game
     {

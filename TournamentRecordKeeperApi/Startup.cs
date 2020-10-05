@@ -16,12 +16,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using IdentityServer4;
 using Newtonsoft.Json;
-using TournamentRecordKeeperApi.Data;
-using TournamentRecordKeeperApi.Models;
+using GameRecordKeeper.Data;
+using GameRecordKeeper.Models;
 using Microsoft.Extensions.Options;
 using IdentityServer4.Models;
 
-namespace TournamentRecordKeeperApi
+namespace GameRecordKeeper
 {
     public class Startup
     {

@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using TournamentRecordKeeperApi.Models;
+using GameRecordKeeper.Models;
 
-namespace TournamentRecordKeeperApi.Areas.Identity.Pages.Account
+namespace GameRecordKeeper.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel

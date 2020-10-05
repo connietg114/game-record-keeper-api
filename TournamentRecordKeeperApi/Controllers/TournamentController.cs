@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TournamentRecordKeeperApi.Data;
-using TournamentRecordKeeperApi.Models;
+using GameRecordKeeper.Data;
+using GameRecordKeeper.Models;
 
-namespace TournamentRecordKeeperApi.Controllers
+namespace GameRecordKeeper.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

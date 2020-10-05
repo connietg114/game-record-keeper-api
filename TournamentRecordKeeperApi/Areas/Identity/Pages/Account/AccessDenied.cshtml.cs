@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace TournamentRecordKeeperApi.Areas.Identity.Pages.Account
+namespace GameRecordKeeper.Areas.Identity.Pages.Account
 {
     public class AccessDeniedModel : PageModel
     {

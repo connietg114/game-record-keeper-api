@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TournamentRecordKeeperApi.Models;
-using TournamentRecordKeeperApi.Data;
+using GameRecordKeeper.Models;
+using GameRecordKeeper.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
 
-namespace TournamentRecordKeeperApi.Controllers
+namespace GameRecordKeeper.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

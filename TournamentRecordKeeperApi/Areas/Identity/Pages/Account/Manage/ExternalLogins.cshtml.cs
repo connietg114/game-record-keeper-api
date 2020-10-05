@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using TournamentRecordKeeperApi.Models;
+using GameRecordKeeper.Models;
 
-namespace TournamentRecordKeeperApi.Areas.Identity.Pages.Account.Manage
+namespace GameRecordKeeper.Areas.Identity.Pages.Account.Manage
 {
     public class ExternalLoginsModel : PageModel
     {

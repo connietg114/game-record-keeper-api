@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using TournamentRecordKeeperApi.Models;
-namespace TournamentRecordKeeperApi.Areas.Identity.Pages.Account.Manage
+using GameRecordKeeper.Models;
+namespace GameRecordKeeper.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {

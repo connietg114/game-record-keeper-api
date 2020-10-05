@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.Extensions.Options;
 using IdentityServer4.EntityFramework.Options;
-using TournamentRecordKeeperApi.Models;
+using GameRecordKeeper.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace TournamentRecordKeeperApi.Data
+namespace GameRecordKeeper.Data
 {
     public class appContext : ApiAuthorizationDbContext<ApplicationUser>
     {

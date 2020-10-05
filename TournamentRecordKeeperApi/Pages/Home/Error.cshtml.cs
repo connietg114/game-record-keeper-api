@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 
-namespace TournamentRecordKeeperApi.Pages.Home
+namespace GameRecordKeeper.Pages.Home
 {
     public class ErrorModel : PageModel
     {

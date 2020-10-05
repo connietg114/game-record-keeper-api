@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using TournamentRecordKeeperApi.Models;
+using GameRecordKeeper.Models;
 
-namespace TournamentRecordKeeperApi.Areas.Identity.Pages.Account.Manage
+namespace GameRecordKeeper.Areas.Identity.Pages.Account.Manage
 {
     public class EnableAuthenticatorModel : PageModel
     {
@@ -149,7 +149,7 @@ namespace TournamentRecordKeeperApi.Areas.Identity.Pages.Account.Manage
         {
             return string.Format(
                 AuthenticatorUriFormat,
-                _urlEncoder.Encode("TournamentRecordKeeperApi"),
+                _urlEncoder.Encode("GameRecordKeeper"),
                 _urlEncoder.Encode(email),
                 unformattedKey);
         }

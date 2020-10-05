@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace TournamentRecordKeeperApi.Migrations
+namespace GameRecordKeeper.Migrations
 {
     public partial class InitialCreate : Migration
     {
