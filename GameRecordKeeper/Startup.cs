@@ -20,6 +20,7 @@ using GameRecordKeeper.Data;
 using GameRecordKeeper.Models;
 using Microsoft.Extensions.Options;
 using IdentityServer4.Models;
+using System.Security.Claims;
 
 namespace GameRecordKeeper
 {
@@ -69,6 +70,16 @@ namespace GameRecordKeeper
 
                         options.SaveTokens = true;
                         options.GetClaimsFromUserInfoEndpoint = true;
+
+                        options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
+                        options.Scope.Add("game-record-keeper-identity");
+
+                        options.ClaimActions.MapJsonKey(
+                            claimType: "game-record-keeper-identity",
+                            jsonKey: "game-record-keeper-identity"
+                            );
+
+                        
                     })
                 .AddIdentityServerJwt();
 

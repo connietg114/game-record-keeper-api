@@ -130,6 +130,12 @@ namespace GameRecordKeeper.Areas.Identity.Pages.Account
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
+
+                        if (info.Principal.HasClaim(c => c.Type == "game-record-keeper-identity"))
+                        {
+                            await _userManager.AddClaimAsync(user, info.Principal.FindFirst("game-record-keeper-identity"));
+                        }
+
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
                         var userId = await _userManager.GetUserIdAsync(user);
