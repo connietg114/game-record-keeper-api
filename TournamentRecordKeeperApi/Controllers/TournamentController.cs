@@ -56,11 +56,11 @@ namespace TournamentRecordKeeperApi.Controllers
 
         [HttpPut]
         [Route("postNewTournament")]
-        public IActionResult PostNewTournament(Tournament tournament, int id)
+        public IActionResult PostNewTournament(Tournament tournament, int TournamentTypeId)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Invalid data.");
-            var type = _Context.TournamentTypes.SingleOrDefault(tt => tt.ID == id);
+            var type = _Context.TournamentTypes.SingleOrDefault(tt => tt.ID == TournamentTypeId);
             if (type == null)
             {
                 return BadRequest("Tournament Type ID is not found");
@@ -75,7 +75,7 @@ namespace TournamentRecordKeeperApi.Controllers
                 tournamentType = type
             }); ;
 
-                _Context.SaveChanges();
+            _Context.SaveChanges();
             
 
 
@@ -109,6 +109,46 @@ namespace TournamentRecordKeeperApi.Controllers
             {
                 message = "OK"
             });
+        }
+
+        [HttpDelete]
+        [Route("deleteMultiTournament")]
+        public IActionResult DeleteTournaments(int[] ids = null)
+        {
+            try
+            {
+                if (ids == null)
+                {
+                    return BadRequest("Tournaments not found");
+
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Not a valid model");
+                }
+
+                foreach (int id in ids)
+                {
+                    var item = _Context.Tournaments.SingleOrDefault(t => t.ID == id);
+                    if (item == null)
+                    {
+                        return BadRequest("Tournament not found");
+                    }
+                    _Context.Tournaments.Remove(item);
+                }
+
+                _Context.SaveChanges();
+
+                return Ok(new
+                {
+                    message = "OK"
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+
+            }
         }
     }
 }
