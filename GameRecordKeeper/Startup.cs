@@ -188,28 +188,6 @@ namespace GameRecordKeeper
                 var context = serviceScope.ServiceProvider.GetRequiredService<appContext>();
                 context.Database.Migrate();
 
-                if (context.Games.Count() == 0)
-                {
-                    context.Games.Add(new Models.Game
-                    {
-                        Name = "Catan",
-                        MinPlayerCount = 2,
-                        MaxPlayerCount = 4
-
-                    });
-
-                    context.Games.Add(new Models.Game
-                    {
-                        Name = "Star Realms",
-                        MinPlayerCount = 1,
-                        MaxPlayerCount = 4
-
-                    });
-
-                }
-                context.SaveChanges();
-
-
                 if (context.TournamentTypes.Count() == 0)
                 {
                     context.TournamentTypes.Add(new Models.TournamentType
@@ -233,74 +211,6 @@ namespace GameRecordKeeper
                         "defeating an entrant ranked one or two places higher."
                     });
 
-                }
-
-                context.SaveChanges();
-
-                if (context.GameMatches.Count() == 0)
-
-                {
-                    context.GameMatches.Add(new Models.GameMatch
-                    {
-                        MatchDate = new DateTime(2020, 03, 06),
-                        game = context.Games.SingleOrDefault(game => game.ID == 1),
-                        tournament = context.Tournaments.SingleOrDefault(t => t.ID == 1)
-                    });
-
-                    context.GameMatches.Add(new Models.GameMatch
-                    {
-                        MatchDate = new DateTime(2020, 08, 10),
-                        game = context.Games.SingleOrDefault(game => game.ID == 2),
-                        tournament = context.Tournaments.SingleOrDefault(t => t.ID == 2)
-
-                    });
-
-                }
-                context.SaveChanges();
-
-
-                if (context.Tournaments.Count() == 0)
-                {
-                    context.Tournaments.Add(new Models.Tournament
-                    {
-                        Name = "TournamentOne",
-                        tournamentType = context.TournamentTypes.SingleOrDefault(tt => tt.Name == "Ladder")
-                    });
-
-                    context.Tournaments.Add(new Models.Tournament
-                    {
-                        Name = "TournamentTwo",
-                        tournamentType = context.TournamentTypes.SingleOrDefault(tt => tt.Name == "Round-robin (all-play-all)")
-                    });
-
-                }
-
-                context.SaveChanges();
-                foreach (var entity in context.Tournaments.Include(z => z.tournamentType).Where(z => z.tournamentType == null).ToList())
-                {
-                    entity.tournamentType = context.TournamentTypes.SingleOrDefault(tt => tt.Name == "Ladder");
-                }
-
-
-                context.SaveChanges();
-
-                foreach (var entity in context.GameMatches.Include(gm => gm.tournament).Where(gm => gm.tournament == null).ToList())
-                {
-                    entity.tournament = context.Tournaments.SingleOrDefault(t => t.ID == 2);
-                }
-
-                context.SaveChanges();
-
-                foreach (var entity in context.Tournaments.ToList())
-                {
-                    entity.StartDate = new DateTime(2020, 08, 10);
-                }
-
-                context.SaveChanges();
-
-                foreach (var entity in context.Tournaments.ToList())
-                {
-                    entity.EndDate = new DateTime(2020, 09, 01);
                 }
 
                 context.SaveChanges();
@@ -333,27 +243,6 @@ namespace GameRecordKeeper
                 }
 
                 context.SaveChanges();
-                if (context.GameModes.Count() == 0)
-                {
-                    context.GameModes.Add(new GameMode
-                    {
-                        game = context.Games.SingleOrDefault(g => g.ID == 1),
-                        Name = "GameMode1",
-                        winCondition = context.WinConditions.SingleOrDefault(w => w.ID == 1),
-
-
-                    });
-                    context.GameModes.Add(new GameMode
-                    {
-                        game = context.Games.SingleOrDefault(g => g.ID == 1),
-                        Name = "GameMode2",
-                        winCondition = context.WinConditions.SingleOrDefault(w => w.ID == 2)
-
-                    });
-                }
-                context.SaveChanges();
-
-
             }
         }
     }
