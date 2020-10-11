@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using GameRecordKeeper.Models;
+using IdentityModel;
 
 namespace GameRecordKeeper.Areas.Identity.Pages.Account
 {
@@ -49,6 +50,9 @@ namespace GameRecordKeeper.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [Required]
+            public string Username { get; set; }
+
             [Required]
             [EmailAddress]
             public string Email { get; set; }
@@ -98,10 +102,11 @@ namespace GameRecordKeeper.Areas.Identity.Pages.Account
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
                 ProviderDisplayName = info.ProviderDisplayName;
-                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email || c.Type == JwtClaimTypes.Name))
                 {
                     Input = new InputModel
                     {
+                        Username = info.Principal.FindFirstValue(JwtClaimTypes.Name),
                         Email = info.Principal.FindFirstValue(ClaimTypes.Email)
                     };
                 }
@@ -122,7 +127,7 @@ namespace GameRecordKeeper.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser { UserName = Input.Username, Email = Input.Email };
 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
