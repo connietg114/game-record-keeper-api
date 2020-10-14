@@ -27,7 +27,7 @@ namespace GameRecordKeeper.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class gameController : ControllerBase
     {
         private readonly appContext _context;
