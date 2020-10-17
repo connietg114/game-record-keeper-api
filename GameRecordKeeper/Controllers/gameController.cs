@@ -40,9 +40,12 @@ namespace GameRecordKeeper.Controllers
         // page=?&rowsPerPage=?&sortBy=Name&SortDirection&Ascending&sortBy=Id&SortDirection=Desc
         //[HttpPost]
         //, List<string> filter = null, List<SortDescription> sort = null
+
+        //sortby
+        //save changes -> 3,2,1
         [HttpGet]
         public ActionResult Get(int? page = null, int? rowsPerPage = null)
-        {
+        {   ///filter->sort->pagination
             if (page == null && rowsPerPage == null)
             {
                 return Ok(_context.Games.Select(g => new {
