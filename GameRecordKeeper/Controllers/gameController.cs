@@ -25,6 +25,14 @@ namespace GameRecordKeeper.Controllers
         public SortOrder Direction { get; set; }
     }
 
+    public class GamesRequest
+    {
+        public int? page { get; set; }
+        public int? rowsPerPage { get; set; }
+        public List<string> sortItems { get; set; }
+    }
+
+
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]
@@ -38,17 +46,110 @@ namespace GameRecordKeeper.Controllers
         }
         //key=sort, value=gameID, Name
         // page=?&rowsPerPage=?&sortBy=Name&SortDirection&Ascending&sortBy=Id&SortDirection=Desc
-        //[HttpPost]
-        //, List<string> filter = null, List<SortDescription> sort = null
 
-        //sortby
-        //save changes -> 3,2,1
-        [HttpGet]
-        public ActionResult Get(int? page = null, int? rowsPerPage = null)
-        {   ///filter->sort->pagination
+        [HttpPost, Route("/api/Games")]
+        //post can only pass in a class/complex object for parameter
+        public ActionResult Get(GamesRequest request)
+        {   ///filter
+            //sort
+          
+
+            int? page = request.page;
+            int? rowsPerPage = request.rowsPerPage;
+            string[] sortItems = request.sortItems?.ToArray();
+
+            var games =_context.Games.AsQueryable();
+
+            //https://stackoverflow.com/questions/13527657/sorting-with-orderby-thenby
+            if (sortItems != null)
+            {
+                IOrderedQueryable<Game> orderedGames = null;
+                for (int i = 0; i < sortItems.Length; i++)
+                {   
+                    var item = sortItems[i];
+                    if (i == 0)
+                    {
+                        if (item == "ID")
+                        {
+                            orderedGames = games.OrderBy(g => g.ID);
+                        }
+                        else if (item == "ID desc")
+                        {
+                            orderedGames = games.OrderByDescending(g => g.ID);
+                        }
+                        else if (item == "Name")
+                        {
+                            orderedGames = games.OrderBy(g => g.Name);
+                        }
+                        else if (item == "Name desc")
+                        {
+                            orderedGames = games.OrderByDescending(g => g.Name);
+                        }
+                        else if (item == "MinPlayerCount")
+                        {
+                            orderedGames = games.OrderBy(g => g.MinPlayerCount);
+                        }
+                        else if (item == "MinPlayerCount desc")
+                        {
+                            orderedGames = games.OrderByDescending(g => g.MinPlayerCount);
+                        }
+                        else if (item == "MaxPlayerCount")
+                        {
+                            orderedGames = games.OrderBy(g => g.MaxPlayerCount);
+                        }
+                        else if (item == "MaxPlayerCount desc")
+                        {
+                            orderedGames = games.OrderByDescending(g => g.MaxPlayerCount);
+                        }
+                    }
+                    else
+                    {
+                        if (item == "ID")
+                        {
+                            orderedGames = orderedGames.ThenBy(g => g.ID);
+                        }
+                        else if (item == "ID desc")
+                        {
+                            orderedGames = orderedGames.ThenByDescending(g => g.ID);
+                        }
+                        else if (item == "Name")
+                        {
+                            orderedGames = orderedGames.ThenBy(g => g.Name);
+                        }
+                        else if (item == "Name desc")
+                        {
+                            orderedGames = orderedGames.ThenByDescending(g => g.Name);
+                        }
+                        else if (item == "MinPlayerCount")
+                        {
+                            orderedGames = orderedGames.ThenBy(g => g.MinPlayerCount);
+                        }
+                        else if (item == "MinPlayerCount desc")
+                        {
+                            orderedGames = orderedGames.ThenByDescending(g => g.MinPlayerCount);
+                        }
+                        else if (item == "MaxPlayerCount")
+                        {
+                            orderedGames = orderedGames.ThenBy(g => g.MaxPlayerCount);
+                        }
+                        else if (item == "MaxPlayerCount desc")
+                        {
+                            orderedGames = orderedGames.ThenByDescending(g => g.MaxPlayerCount);
+                        }
+                    }
+                    
+                }
+                if (sortItems.Length > 0) {
+                    games = orderedGames;
+                }
+                
+            }
+
+
+            //pagination
             if (page == null && rowsPerPage == null)
             {
-                return Ok(_context.Games.Select(g => new {
+                return Ok(games.Select(g => new {
                     id = g.ID,
                     name = g.Name,
                     minPlayerCount = g.MinPlayerCount,
@@ -61,7 +162,7 @@ namespace GameRecordKeeper.Controllers
             int rows = rowsPerPage.Value;
             return Ok(new
             {
-                games = _context.Games.AsQueryable()
+                games = games.AsQueryable()
                 .Skip(pageNo * rows)
                 .Take(rows)
                 .Select(g => new
@@ -72,7 +173,7 @@ namespace GameRecordKeeper.Controllers
                     maxPlayerCount = g.MaxPlayerCount,
                     gameModes = g.GameModes.Count
                 }).ToList(),
-                total = _context.Games.Count()
+                total = games.Count()
             });
             
 
@@ -95,6 +196,7 @@ namespace GameRecordKeeper.Controllers
         }
 
         [HttpPost]
+
         public IActionResult Post(Game item)
         {
             //if (!ModelState.IsValid)
@@ -118,7 +220,7 @@ namespace GameRecordKeeper.Controllers
             return Ok(
                 new
                 {
-                    message = "OK"
+                    message = "Item is posted"
                 });
         }
 
@@ -140,7 +242,7 @@ namespace GameRecordKeeper.Controllers
                 _context.Games.Remove(_context.Games.SingleOrDefault(g => g.ID == id));
                 _context.SaveChanges();
                 return Ok(new {
-                    message = "OK"
+                    message = "Item is deleted"
                 });
             }
             catch (Exception e)
@@ -180,7 +282,7 @@ namespace GameRecordKeeper.Controllers
                 _context.SaveChanges();
                 return Ok(new
                 {
-                    message = "OK"
+                    message = "Items are deleted"
                 });
             }
             catch (Exception e)
