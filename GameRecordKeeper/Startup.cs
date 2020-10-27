@@ -48,8 +48,10 @@ namespace GameRecordKeeper
                 .AddEntityFrameworkStores<appContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, appContext>()
-                .AddInMemoryClients(Config.GetClients(config.GameRecordKeeperApiConfiguration));
+                .AddApiAuthorization<ApplicationUser, appContext>(options =>
+                {
+                    options.Clients.AddRange(Config.GetClients(config.GameRecordKeeperApiConfiguration).ToArray());
+                });
 
             services.AddAuthentication()
                 .AddOpenIdConnect(
@@ -66,7 +68,7 @@ namespace GameRecordKeeper
                         options.ClientSecret = openIdConfig?.ClientSecret;
                         options.ResponseType = openIdConfig?.ResponseType;
 
-                        options.UsePkce = openIdConfig?.UsePkce ?? false;
+                        options.UsePkce = openIdConfig?.UsePkce ?? true;
 
                         options.SaveTokens = true;
                         options.GetClaimsFromUserInfoEndpoint = true;
@@ -78,8 +80,6 @@ namespace GameRecordKeeper
                             claimType: "game-record-keeper-identity",
                             jsonKey: "game-record-keeper-identity"
                             );
-
-                        
                     })
                 .AddIdentityServerJwt();
 
