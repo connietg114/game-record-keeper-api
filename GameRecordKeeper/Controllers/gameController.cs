@@ -101,6 +101,14 @@ namespace GameRecordKeeper.Controllers
                         {
                             orderedGames = games.OrderByDescending(g => g.MaxPlayerCount);
                         }
+                        else if (item == "GameModeCount")
+                        {
+                            orderedGames = games.OrderBy(g => g.GameModes.Count);
+                        }
+                        else if (item == "GameModeCount desc")
+                        {
+                            orderedGames = games.OrderByDescending(g => g.GameModes.Count);
+                        }
                     }
                     else
                     {
@@ -135,6 +143,14 @@ namespace GameRecordKeeper.Controllers
                         else if (item == "MaxPlayerCount desc")
                         {
                             orderedGames = orderedGames.ThenByDescending(g => g.MaxPlayerCount);
+                        }
+                        else if (item == "GameModeCount")
+                        {
+                            orderedGames = orderedGames.ThenBy(g => g.GameModes.Count);
+                        }
+                        else if (item == "GameModeCount desc")
+                        {
+                            orderedGames = orderedGames.ThenByDescending(g => g.GameModes.Count);
                         }
                     }
                     
