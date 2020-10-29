@@ -247,19 +247,23 @@ namespace GameRecordKeeper.Controllers
             {
                 if (id == null)
                 {
-                    return BadRequest("Game not found");
+                    return BadRequest("Game not found.");
 
                 }
-                if (!ModelState.IsValid)
+                else if (!ModelState.IsValid)
                 {
-                    return BadRequest("Not a valid model");
+                    return BadRequest("Not a valid model.");
+                }else if (_context.GameMatches.Where(g=>g.game.ID==id).ToList().Count!=0)
+                {
+                    return BadRequest("Game " + id + " exists in Game Match(es).");
                 }
 
                 _context.Games.Remove(_context.Games.SingleOrDefault(g => g.ID == id));
                 _context.SaveChanges();
-                return Ok(new {
-                    message = "Item is deleted"
-                });
+                return Ok("Game is deleted");
+                //return Ok(new {
+                //    message = "Item is deleted"
+                //});
             }
             catch (Exception e)
             {
@@ -296,10 +300,11 @@ namespace GameRecordKeeper.Controllers
                 }
                 
                 _context.SaveChanges();
-                return Ok(new
-                {
-                    message = "Items are deleted"
-                });
+                return Ok("Games are deleted");
+                //return Ok(new
+                //{
+                //    message = "Items are deleted"
+                //});
             }
             catch (Exception e)
             {
