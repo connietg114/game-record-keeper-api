@@ -26,5 +26,6 @@ namespace GameRecordKeeper.Data
         public DbSet<FirstOf> FirstOf { get; set; }
         public DbSet<BestOf> BestOf { get; set; }
         public DbSet<Survival> Survivals { get; set; }
+        public DbSet<Player> Players { get; set; }
     }
 }
