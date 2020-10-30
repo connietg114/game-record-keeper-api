@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using GameRecordKeeper.Models;
 using IdentityModel;
+using GameRecordKeeper.Data;
+using AutoMapper.Configuration;
 
 namespace GameRecordKeeper.Areas.Identity.Pages.Account
 {
@@ -25,17 +27,21 @@ namespace GameRecordKeeper.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly appContext _context;
 
         public ExternalLoginModel(
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            appContext context
+            )
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         [BindProperty]
@@ -138,7 +144,28 @@ namespace GameRecordKeeper.Areas.Identity.Pages.Account
 
                         if (info.Principal.HasClaim(c => c.Type == "game-record-keeper-identity"))
                         {
-                            await _userManager.AddClaimAsync(user, info.Principal.FindFirst("game-record-keeper-identity"));
+                            var grkClaims = info.Principal.Claims
+                                .Where(c => c.Type == "game-record-keeper-identity" && c.Issuer == info.LoginProvider);
+                            await _userManager.AddClaimsAsync(user, grkClaims);
+                        }
+
+                        if (!info.Principal.HasClaim(c => c.Type == "game-record-keeper-identity" && c.Value == "admin") &&
+                            !info.Principal.HasClaim(c => c.Type == "game-record-keeper-identity" && c.Value == "player"))
+                        {
+                            await _userManager.AddClaimAsync(user, new Claim("game-record-keeper-identity", "player"));
+                        }
+
+                        if (!info.Principal.HasClaim(c => c.Type == "game-record-keeper-identity" && c.Value == "admin") ||
+                            info.Principal.HasClaim(c => c.Type == "game-record-keeper-identity" && c.Value == "player"))
+                        {
+                            Player player = new Player
+                            {
+                                PreferredName = user.UserName,
+                                Account = user
+                            };
+
+                            _context.Players.Add(player);
+                            await _context.SaveChangesAsync();
                         }
 
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
