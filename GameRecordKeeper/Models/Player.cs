@@ -5,10 +5,23 @@ using System.Threading.Tasks;
 
 namespace GameRecordKeeper.Models
 {
+    public enum Gender
+    {
+        NotKnown = 0,
+        Male = 1,
+        Female = 2,
+        NotApplicable = 9
+    }
+
     public class Player
     {
+        public Player()
+        {
+            Gender = Gender.NotKnown;
+        }
+
         public int ID { get; set; }
-        public string Gender { get; set; }
+        public Gender Gender { get; set; }
         public string PreferredName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
