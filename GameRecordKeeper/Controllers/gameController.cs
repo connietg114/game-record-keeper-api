@@ -12,17 +12,14 @@ using static IdentityServer4.IdentityServerConstants;
 
 namespace GameRecordKeeper.Controllers
 {
-    public enum SortOrder
-    {
-        Ascending,
-        Desceding
-    }
 
-    public class SortDescription
+    public class FilterItems
     {
-        public string FieldName { get; set; }
-        public int Priority { get; set; }
-        public SortOrder Direction { get; set; }
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public int MinPlayerCount { get; set; }
+        public int MaxPlayerCount { get; set; }
+        public int GameModeCount { get; set; }
     }
 
     public class GamesRequest
@@ -30,6 +27,9 @@ namespace GameRecordKeeper.Controllers
         public int? page { get; set; }
         public int? rowsPerPage { get; set; }
         public List<string> sortItems { get; set; }
+        public List<string> filterItems { get; set; }
+        //public FilterItems filterItems { get; set; }
+
     }
 
 
@@ -44,24 +44,69 @@ namespace GameRecordKeeper.Controllers
         {
             _context = context;
         }
-        //key=sort, value=gameID, Name
-        // page=?&rowsPerPage=?&sortBy=Name&SortDirection&Ascending&sortBy=Id&SortDirection=Desc
-
+       
         [HttpPost, Route("/api/Games")]
         //post can only pass in a class/complex object for parameter
         public ActionResult Get(GamesRequest request)
-        {   ///filter
-            //sort
-          
-
+        {   
             int? page = request.page;
             int? rowsPerPage = request.rowsPerPage;
             string[] sortItems = request.sortItems?.ToArray();
+            string[] filterItems = request.filterItems?.ToArray();
 
             var games =_context.Games.AsQueryable();
 
-            //https://stackoverflow.com/questions/13527657/sorting-with-orderby-thenby
-            if (sortItems != null)
+            //filter
+            if (filterItems != null)
+            {
+                for (int i = 0; i < filterItems.Length; i++)
+                {
+                    var item = filterItems[i];
+                    string[] splitItem = item.Split();
+
+                    
+                    if (Int32.TryParse(splitItem[1], out int aNum))
+                    {
+                        if (splitItem[0] == "ID")
+                        {
+                            games = games.Where(g => g.ID == aNum);
+                        }
+                            
+                        else if (splitItem[0] == "MinPlayerCount")
+                        {
+                            games = games.Where(g => g.MinPlayerCount == aNum);
+                        }
+
+                        else if (splitItem[0] == "MaxPlayerCount")
+                        {
+                            games = games.Where(g => g.MaxPlayerCount == aNum);
+                        }
+
+                        else if (splitItem[0] == "GameModeCount")
+                        {
+                            games = games.Where(g => g.GameModes.Count == aNum);
+                        }
+
+                    }
+                    else
+                    {
+                        if (splitItem[0] == "Name")
+                        {
+                            games = games.Where(g => g.Name == splitItem[1]);
+                        }
+                        else
+                        {
+                            return BadRequest("This should be a numeric number");
+                        }
+                        
+                    }
+                        
+                }
+            }
+
+                //sort
+                //https://stackoverflow.com/questions/13527657/sorting-with-orderby-thenby
+                if (sortItems != null)
             {
                 IOrderedQueryable<Game> orderedGames = null;
                 for (int i = 0; i < sortItems.Length; i++)
@@ -295,8 +340,15 @@ namespace GameRecordKeeper.Controllers
                     if (item == null)
                     {
                         return BadRequest("Game not found");
+                    }else if (_context.GameMatches.Where(g => g.game.ID == id).ToList().Count != 0)
+                    {
+                        return BadRequest("Game " + id + " exists in Game Match(es).");
                     }
-                    _context.Games.Remove(item);
+                    else
+                    {
+                        _context.Games.Remove(item);
+                    }
+                    
                 }
                 
                 _context.SaveChanges();
