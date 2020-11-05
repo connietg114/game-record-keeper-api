@@ -86,6 +86,10 @@ namespace GameRecordKeeper.Controllers
                         {
                             games = games.Where(g => g.GameModes.Count == aNum);
                         }
+                        else
+                        {
+                            games = games.Where(g => g.Name == splitItem[1]);
+                        }
 
                     }
                     else
