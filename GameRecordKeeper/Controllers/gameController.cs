@@ -63,32 +63,29 @@ namespace GameRecordKeeper.Controllers
                 {
                     var item = filterItems[i];
                     string[] splitItem = item.Split();
-
-                    
-                    if (Int32.TryParse(splitItem[1], out int aNum))
+                    //Int32.TryParse(splitItem[1], out int aNum)
+                    if (splitItem.Length==3)
                     {
-                        if (splitItem[0] == "ID")
+                        var min = int.Parse(splitItem[1]);
+                        var max = int.Parse(splitItem[2]);
+
+                        if (splitItem[0] == "MinPlayerCount")
                         {
-                            games = games.Where(g => g.ID == aNum);
-                        }
-                            
-                        else if (splitItem[0] == "MinPlayerCount")
-                        {
-                            games = games.Where(g => g.MinPlayerCount == aNum);
+                            games = games.Where(g => g.MinPlayerCount>= min && g.MinPlayerCount <= max);
                         }
 
                         else if (splitItem[0] == "MaxPlayerCount")
                         {
-                            games = games.Where(g => g.MaxPlayerCount == aNum);
+                            games = games.Where(g => g.MaxPlayerCount >= min && g.MaxPlayerCount <= max);
                         }
 
                         else if (splitItem[0] == "GameModeCount")
                         {
-                            games = games.Where(g => g.GameModes.Count == aNum);
+                            games = games.Where(g => g.GameModes.Count >= min && g.GameModes.Count <= max);
                         }
                         else
                         {
-                            games = games.Where(g => g.Name == splitItem[1]);
+                            return BadRequest("Item not found.");
                         }
 
                     }
@@ -96,15 +93,16 @@ namespace GameRecordKeeper.Controllers
                     {
                         if (splitItem[0] == "Name")
                         {
-                            games = games.Where(g => g.Name == splitItem[1]);
+                            games = games.Where(g => EF.Functions.Like(g.Name, $"%{splitItem[1]}%"));
+                            //games.Where(g => g.Name.ToLower().Contains(splitItem[1].ToLower()));
                         }
                         else
                         {
                             return BadRequest("This should be a numeric number");
                         }
-                        
+
                     }
-                        
+
                 }
             }
 
