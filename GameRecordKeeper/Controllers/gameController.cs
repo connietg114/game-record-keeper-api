@@ -64,24 +64,48 @@ namespace GameRecordKeeper.Controllers
                     var item = filterItems[i];
                     string[] splitItem = item.Split();
                     //Int32.TryParse(splitItem[1], out int aNum)
+
                     if (splitItem.Length==3)
                     {
-                        var min = int.Parse(splitItem[1]);
-                        var max = int.Parse(splitItem[2]);
+                        var value = int.Parse(splitItem[2]);
 
                         if (splitItem[0] == "MinPlayerCount")
                         {
-                            games = games.Where(g => g.MinPlayerCount>= min && g.MinPlayerCount <= max);
+                            if(splitItem[1] == "min")
+                            {
+                                games = games.Where(g => g.MinPlayerCount >= value);
+                            }
+                            else if(splitItem[1] == "max")
+                            {
+                                games = games.Where(g => g.MinPlayerCount <= value);
+                            }
+                            
                         }
 
                         else if (splitItem[0] == "MaxPlayerCount")
                         {
-                            games = games.Where(g => g.MaxPlayerCount >= min && g.MaxPlayerCount <= max);
+                            if (splitItem[1] == "min")
+                            {
+                                games = games.Where(g => g.MaxPlayerCount >= value);
+                            }
+                            else if (splitItem[1] == "max")
+                            {
+                                games = games.Where(g => g.MaxPlayerCount <= value);
+                            }
+                                
                         }
 
                         else if (splitItem[0] == "GameModeCount")
                         {
-                            games = games.Where(g => g.GameModes.Count >= min && g.GameModes.Count <= max);
+                            if (splitItem[1] == "min")
+                            {
+                                games = games.Where(g => g.GameModes.Count >= value);
+                            }
+                            else if (splitItem[1] == "max")
+                            {
+                                games = games.Where(g => g.GameModes.Count <= value);
+                            }
+                            
                         }
                         else
                         {
@@ -98,7 +122,7 @@ namespace GameRecordKeeper.Controllers
                         }
                         else
                         {
-                            return BadRequest("This should be a numeric number");
+                            return BadRequest("Item not found.");
                         }
 
                     }
