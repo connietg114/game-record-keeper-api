@@ -286,24 +286,36 @@ namespace GameRecordKeeper.Controllers
 
         public IActionResult Post(Game item)
         {
-            //if (!ModelState.IsValid)
-            //    return BadRequest("Not a valid model");
-            //if (string.IsNullOrEmpty(item.Name))
-            //    return BadRequest("No name is provided");
-            //if (item == null)
-            //    return BadRequest("No data is provided");
+            //if (!ModelState.IsValid)return BadRequest("Not a valid model");
+            //if (string.IsNullOrEmpty(item.Name))return BadRequest("No name is provided");
+            //if (item == null)return BadRequest("No data is provided");
             //if ID already exists?
 
-            _context.Games.Add(new Game()
-            {
 
+
+            var game = new Game
+            {
                 Name = item.Name,
                 MinPlayerCount = item.MinPlayerCount,
-                MaxPlayerCount = item.MaxPlayerCount
+                MaxPlayerCount = item.MaxPlayerCount,
+                GameModes = new List<GameMode>()
+            };
 
-            });
+            _context.Games.Add(game);
+
+            foreach (var gameMode in item.GameModes)
+            {
+                var gm = new GameMode
+                {
+                    Name = gameMode.Name,
+                    Description = gameMode.Description,
+                    winCondition = gameMode.winCondition
+                };
+                game.GameModes.Add(gm);
+            }
 
             _context.SaveChanges();
+
             return Ok(
                 new
                 {
