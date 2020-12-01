@@ -282,16 +282,29 @@ namespace GameRecordKeeper.Controllers
                 .SingleOrDefault(g => g.ID == id));
         }
 
-        [HttpPost]
+        public class GameModeItem
+        {
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public int WinConditionID { get; set; }
+        }
+        public class GameItem
+        {
+            public string Name { get; set; }
+            public int MinPlayerCount { get; set; }
+            public int MaxPlayerCount { get; set; }
+            public List<GameModeItem> GameModeItems { get; set; }
+            
+        }
+        
 
-        public IActionResult Post(Game item)
+        [HttpPost]
+        public IActionResult Post(GameItem item)
         {
             //if (!ModelState.IsValid)return BadRequest("Not a valid model");
             //if (string.IsNullOrEmpty(item.Name))return BadRequest("No name is provided");
             //if (item == null)return BadRequest("No data is provided");
             //if ID already exists?
-
-
 
             var game = new Game
             {
@@ -303,13 +316,13 @@ namespace GameRecordKeeper.Controllers
 
             _context.Games.Add(game);
 
-            foreach (var gameMode in item.GameModes)
+            foreach (var gameMode in item.GameModeItems)
             {
                 var gm = new GameMode
                 {
                     Name = gameMode.Name,
                     Description = gameMode.Description,
-                    winCondition = gameMode.winCondition
+                    winCondition = _context.WinConditions.SingleOrDefault(w=>w.ID==gameMode.WinConditionID)
                 };
                 game.GameModes.Add(gm);
             }
