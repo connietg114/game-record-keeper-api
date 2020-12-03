@@ -45,8 +45,7 @@ namespace GameRecordKeeper.Controllers
             _context = context;
         }
        
-        [HttpPost, Route("/api/Games")]
-        //post can only pass in a class/complex object for parameter
+        [HttpPost, Route("/api/Games")]//post can only pass in a class/complex object for parameter
         public ActionResult Get(GamesRequest request)
         {   
             int? page = request.page;
@@ -63,7 +62,6 @@ namespace GameRecordKeeper.Controllers
                 {
                     var item = filterItems[i];
                     string[] splitItem = item.Split();
-                    //Int32.TryParse(splitItem[1], out int aNum)
 
                     if (splitItem.Length==3)
                     {
@@ -117,8 +115,7 @@ namespace GameRecordKeeper.Controllers
                     {
                         if (splitItem[0] == "Name")
                         {
-                            games = games.Where(g => EF.Functions.Like(g.Name, $"%{splitItem[1]}%"));
-                            //games.Where(g => g.Name.ToLower().Contains(splitItem[1].ToLower()));
+                            games = games.Where(g => EF.Functions.Like(g.Name, $"%{splitItem[1]}%")); //OR games.Where(g => g.Name.ToLower().Contains(splitItem[1].ToLower()));
                         }
                         else
                         {
