@@ -28,8 +28,6 @@ namespace GameRecordKeeper.Controllers
         public int? rowsPerPage { get; set; }
         public List<string> sortItems { get; set; }
         public List<string> filterItems { get; set; }
-        //public FilterItems filterItems { get; set; }
-
     }
 
 
@@ -44,6 +42,12 @@ namespace GameRecordKeeper.Controllers
         {
             _context = context;
         }
+        //[HttpPost]
+        //[Route("sort")]
+        //public ActionResult Sort(string? item)
+        //{
+
+        //}
        
         [HttpPost, Route("/api/Games")]//post can only pass in a class/complex object for parameter
         public ActionResult Get(GamesRequest request)
@@ -258,10 +262,7 @@ namespace GameRecordKeeper.Controllers
                     gameModes = g.GameModes.Count
                 }).ToList(),
                 total = games.Count()
-            });
-            
-
-
+            });         
         }
 
         [HttpGet]
@@ -327,6 +328,55 @@ namespace GameRecordKeeper.Controllers
             _context.SaveChanges();
 
             return Ok(
+                new
+                {
+                    message = "Item is posted"
+                });
+        }
+
+        public class EditGameModeItem
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public int WinConditionID { get; set; }
+        }
+
+        public class EditItem
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public int MinPlayerCount { get; set; }
+            public int MaxPlayerCount { get; set; }
+            public List<EditGameModeItem> EditGameModeItems { get; set; }
+        }
+
+        [HttpPost]
+        [Route("editGame")]
+        public ActionResult Edit(EditItem editItem)
+        {
+            var game = _context.Games.SingleOrDefault(g => g.ID == editItem.ID);
+            game.Name = editItem.Name;
+            game.MinPlayerCount = editItem.MinPlayerCount;
+            game.MaxPlayerCount = editItem.MaxPlayerCount;
+
+            //var gameModeList = _context.GameModes.Where(gm => gm.game.ID == editItem.ID).ToList();
+
+            for (var i = 0; i < editItem.EditGameModeItems.Count; i++)
+            {
+                var gm = _context.GameModes.SingleOrDefault(g => g.ID == editItem.EditGameModeItems[i].ID);
+
+                gm.Name = editItem.EditGameModeItems[i].Name;
+                gm.Description = editItem.EditGameModeItems[i].Description;
+                gm.winCondition = _context.WinConditions.SingleOrDefault(w => w.ID == editItem.EditGameModeItems[i].WinConditionID);
+                _context.Update(gm);
+            }
+
+            _context.Update(game);
+           
+            _context.SaveChanges();
+  
+          return Ok(
                 new
                 {
                     message = "Item is posted"
