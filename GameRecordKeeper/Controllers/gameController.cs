@@ -336,7 +336,7 @@ namespace GameRecordKeeper.Controllers
 
         public class EditGameModeItem
         {
-            public int ID { get; set; }
+            public int? ID { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
             public int WinConditionID { get; set; }
@@ -355,25 +355,44 @@ namespace GameRecordKeeper.Controllers
         [Route("editGame")]
         public ActionResult Edit(EditItem editItem)
         {
-            var game = _context.Games.SingleOrDefault(g => g.ID == editItem.ID);
+            var game = _context.Games
+                .Include(g => g.GameModes)
+                .Include(g => g.GameModes).ThenInclude(gm => gm.winCondition)
+                .SingleOrDefault(g => g.ID == editItem.ID);
+            
             game.Name = editItem.Name;
             game.MinPlayerCount = editItem.MinPlayerCount;
             game.MaxPlayerCount = editItem.MaxPlayerCount;
 
-            //var gameModeList = _context.GameModes.Where(gm => gm.game.ID == editItem.ID).ToList();
-
             for (var i = 0; i < editItem.EditGameModeItems.Count; i++)
             {
-                var gm = _context.GameModes.SingleOrDefault(g => g.ID == editItem.EditGameModeItems[i].ID);
+                var gm = game.GameModes.SingleOrDefault(g => g.ID == editItem.EditGameModeItems[i].ID);
+                if (gm != null)
+                {
+                    gm.Name = editItem.EditGameModeItems[i].Name;
+                    gm.Description = editItem.EditGameModeItems[i].Description;
+                    gm.winCondition = _context.WinConditions.SingleOrDefault(w => w.ID == editItem.EditGameModeItems[i].WinConditionID);
+                    _context.Update(gm);
+                }
+                else if (gm == null)
+                {
+                    var gamemode = new GameMode
+                    {
+                        Name = editItem.EditGameModeItems[i].Name,
+                        Description = editItem.EditGameModeItems[i].Description,
+                        winCondition = _context.WinConditions.SingleOrDefault(w => w.ID == editItem.EditGameModeItems[i].WinConditionID)
+                    };
+                    game.GameModes.Add(gamemode);
+                }
 
-                gm.Name = editItem.EditGameModeItems[i].Name;
-                gm.Description = editItem.EditGameModeItems[i].Description;
-                gm.winCondition = _context.WinConditions.SingleOrDefault(w => w.ID == editItem.EditGameModeItems[i].WinConditionID);
-                _context.Update(gm);
             }
-
+            var originalGameModeList = game.GameModes.Where(gm => gm.game.ID == editItem.ID).ToList();
+            var deletedGameModes = originalGameModeList.Where(gm => editItem.EditGameModeItems.All(gm2 => gm2.ID != gm.ID)) ;
+            if (deletedGameModes != null)
+            {
+                _context.GameModes.RemoveRange(deletedGameModes);
+            }
             _context.Update(game);
-           
             _context.SaveChanges();
   
           return Ok(
