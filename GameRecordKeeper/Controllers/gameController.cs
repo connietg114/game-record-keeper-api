@@ -359,7 +359,7 @@ namespace GameRecordKeeper.Controllers
                 .Include(g => g.GameModes)
                 .Include(g => g.GameModes).ThenInclude(gm => gm.winCondition)
                 .SingleOrDefault(g => g.ID == editItem.ID);
-            
+
             game.Name = editItem.Name;
             game.MinPlayerCount = editItem.MinPlayerCount;
             game.MaxPlayerCount = editItem.MaxPlayerCount;
@@ -386,9 +386,11 @@ namespace GameRecordKeeper.Controllers
                 }
 
             }
-            var originalGameModeList = game.GameModes.Where(gm => gm.game.ID == editItem.ID).ToList();
-            var deletedGameModes = originalGameModeList.Where(gm => editItem.EditGameModeItems.All(gm2 => gm2.ID != gm.ID)) ;
-            if (deletedGameModes != null)
+            var originalGameModeList = _context.GameModes.Where(gm => gm.game.ID == editItem.ID).ToList();
+
+            var deletedGameModes = originalGameModeList.Where(gm => editItem.EditGameModeItems.All(gm2 => gm2 != null && gm2.ID != gm.ID));
+            //var result = list1.Except(list2);
+            if (deletedGameModes != null )
             {
                 _context.GameModes.RemoveRange(deletedGameModes);
             }
