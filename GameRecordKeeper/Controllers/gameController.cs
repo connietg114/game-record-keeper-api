@@ -42,16 +42,16 @@ namespace GameRecordKeeper.Controllers
         {
             _context = context;
         }
-       
+
         [HttpPost, Route("/api/Games")]//post can only pass in a class/complex object for parameter
         public ActionResult Get(GamesRequest request)
-        {   
+        {
             int? page = request.page;
             int? rowsPerPage = request.rowsPerPage;
             string[] sortItems = request.sortItems?.ToArray();
             string[] filterItems = request.filterItems?.ToArray();
 
-            var games =_context.Games.AsQueryable();
+            var games = _context.Games.AsQueryable();
 
             //filter
             if (filterItems != null)
@@ -61,21 +61,21 @@ namespace GameRecordKeeper.Controllers
                     var item = filterItems[i];
                     string[] splitItem = item.Split();
 
-                    if (splitItem.Length==3)
+                    if (splitItem.Length == 3)
                     {
                         var value = int.Parse(splitItem[2]);
 
                         if (splitItem[0] == "MinPlayerCount")
                         {
-                            if(splitItem[1] == "min")
+                            if (splitItem[1] == "min")
                             {
                                 games = games.Where(g => g.MinPlayerCount >= value);
                             }
-                            else if(splitItem[1] == "max")
+                            else if (splitItem[1] == "max")
                             {
                                 games = games.Where(g => g.MinPlayerCount <= value);
                             }
-                            
+
                         }
 
                         else if (splitItem[0] == "MaxPlayerCount")
@@ -88,7 +88,7 @@ namespace GameRecordKeeper.Controllers
                             {
                                 games = games.Where(g => g.MaxPlayerCount <= value);
                             }
-                                
+
                         }
                         else if (splitItem[0] == "GameId")
                         {
@@ -113,7 +113,7 @@ namespace GameRecordKeeper.Controllers
                             {
                                 games = games.Where(g => g.GameModes.Count <= value);
                             }
-                            
+
                         }
                         else
                         {
@@ -137,13 +137,13 @@ namespace GameRecordKeeper.Controllers
                 }
             }
 
-                //sort
-                //https://stackoverflow.com/questions/13527657/sorting-with-orderby-thenby
-                if (sortItems != null)
+            //sort
+            //https://stackoverflow.com/questions/13527657/sorting-with-orderby-thenby
+            if (sortItems != null)
             {
                 IOrderedQueryable<Game> orderedGames = null;
                 for (int i = 0; i < sortItems.Length; i++)
-                {   
+                {
                     var item = sortItems[i];
                     if (i == 0)
                     {
@@ -231,12 +231,12 @@ namespace GameRecordKeeper.Controllers
                             orderedGames = orderedGames.ThenByDescending(g => g.GameModes.Count);
                         }
                     }
-                    
+
                 }
                 if (sortItems.Length > 0) {
                     games = orderedGames;
                 }
-                
+
             }
 
 
@@ -268,7 +268,7 @@ namespace GameRecordKeeper.Controllers
                     gameModes = g.GameModes.Count
                 }).ToList(),
                 total = games.Count()
-            });         
+            });
         }
 
         [HttpGet]
@@ -278,11 +278,11 @@ namespace GameRecordKeeper.Controllers
             if (id == null)
             {
                 return BadRequest("Game ID is not provided");
-                
+
             }
             return Ok(_context.Games
                 .Include(g => g.GameModes)
-                .Include(g => g.GameModes).ThenInclude(gm=>gm.winCondition)
+                .Include(g => g.GameModes).ThenInclude(gm => gm.winCondition)
                 .SingleOrDefault(g => g.ID == id));
         }
 
@@ -298,9 +298,9 @@ namespace GameRecordKeeper.Controllers
             public int MinPlayerCount { get; set; }
             public int MaxPlayerCount { get; set; }
             public List<GameModeItem> GameModeItems { get; set; }
-            
+
         }
-        
+
 
         [HttpPost]
         public IActionResult Post(GameItem item)
@@ -309,35 +309,62 @@ namespace GameRecordKeeper.Controllers
             //if (string.IsNullOrEmpty(item.Name))return BadRequest("No name is provided");
             //if (item == null)return BadRequest("No data is provided");
             //if ID already exists?
-
-            var game = new Game
+            if (item.Name.Length < 1 || item.Name == null)
             {
-                Name = item.Name,
-                MinPlayerCount = item.MinPlayerCount,
-                MaxPlayerCount = item.MaxPlayerCount,
-                GameModes = new List<GameMode>()
-            };
-
-            _context.Games.Add(game);
-
-            foreach (var gameMode in item.GameModeItems)
+                return BadRequest("Name has to be at least 1 letter.");
+            }
+            else if (item.MinPlayerCount == null || item.MaxPlayerCount == null)
             {
-                var gm = new GameMode
+                return BadRequest("MinPlayerCount/MaxPlayerCount cannot be empty");
+            }
+            else if (item.MinPlayerCount > item.MaxPlayerCount)
+            {
+                return BadRequest("MinPlayerCount has to be smaller than MaxPlayerCount/MaxPlayerCount has to be larger than MinPlayerCount.");
+            }
+            else if (item.GameModeItems.Count == 0 || item.GameModeItems == null)
+            {
+                return BadRequest("Each game has to have at least one GameMode.");
+            }
+            else
+            {
+                var game = new Game
                 {
-                    Name = gameMode.Name,
-                    Description = gameMode.Description,
-                    winCondition = _context.WinConditions.SingleOrDefault(w=>w.ID==gameMode.WinConditionID)
+                    Name = item.Name,
+                    MinPlayerCount = item.MinPlayerCount,
+                    MaxPlayerCount = item.MaxPlayerCount,
+                    GameModes = new List<GameMode>()
                 };
-                game.GameModes.Add(gm);
+
+                _context.Games.Add(game);
+
+                foreach (var gameMode in item.GameModeItems)
+                {
+                    if(_context.WinConditions.SingleOrDefault(w => w.ID == gameMode.WinConditionID) == null)
+                    {
+                        return BadRequest("Cannot find WinConditionId");
+                    }
+                    else
+                    {
+                        var gm = new GameMode
+                        {
+                            Name = gameMode.Name,
+                            Description = gameMode.Description,
+                            winCondition = _context.WinConditions.SingleOrDefault(w => w.ID == gameMode.WinConditionID)
+                        };
+                        game.GameModes.Add(gm);
+                    }
+                   
+                }
+
             }
 
             _context.SaveChanges();
 
             return Ok(
                 new
-                {
+                {   game = _context.Games.OrderByDescending(g => g.ID).FirstOrDefault(),
                     message = "Item is posted"
-                });
+                }) ;
         }
 
         public class EditGameModeItem
@@ -366,36 +393,66 @@ namespace GameRecordKeeper.Controllers
                 .Include(g => g.GameModes).ThenInclude(gm => gm.winCondition)
                 .SingleOrDefault(g => g.ID == editItem.ID);
 
-            game.Name = editItem.Name;
-            game.MinPlayerCount = editItem.MinPlayerCount;
-            game.MaxPlayerCount = editItem.MaxPlayerCount;
-
-            for (var i = 0; i < editItem.EditGameModeItems.Count; i++)
+            if (editItem.Name.Length < 1 || editItem.Name == null)
             {
-                var gm = game.GameModes.SingleOrDefault(g => g.ID == editItem.EditGameModeItems[i].ID);
-                if (gm != null)
-                {
-                    gm.Name = editItem.EditGameModeItems[i].Name;
-                    gm.Description = editItem.EditGameModeItems[i].Description;
-                    gm.winCondition = _context.WinConditions.SingleOrDefault(w => w.ID == editItem.EditGameModeItems[i].WinConditionID);
-                    _context.Update(gm);
-                }
-                else if (gm == null)
-                {
-                    var gamemode = new GameMode
-                    {
-                        Name = editItem.EditGameModeItems[i].Name,
-                        Description = editItem.EditGameModeItems[i].Description,
-                        winCondition = _context.WinConditions.SingleOrDefault(w => w.ID == editItem.EditGameModeItems[i].WinConditionID)
-                    };
-                    game.GameModes.Add(gamemode);
-                }
-
+                return BadRequest("Name has to be at least 1 letter.");
             }
-            var originalGameModeList = _context.GameModes.Where(gm => gm.game.ID == editItem.ID).ToList();
 
+            else if (editItem.MinPlayerCount == null || editItem.MaxPlayerCount == null)
+            {
+                return BadRequest("MinPlayerCount/MaxPlayerCount cannot be empty");
+            }
+            else if (editItem.MinPlayerCount > editItem.MaxPlayerCount)
+            {
+                return BadRequest("MinPlayerCount has to be smaller than MaxPlayerCount/MaxPlayerCount has to be larger than MinPlayerCount.");
+            }
+            else
+            {
+                game.Name = editItem.Name;
+                game.MinPlayerCount = editItem.MinPlayerCount;
+                game.MaxPlayerCount = editItem.MaxPlayerCount;
+            }
+
+            if (editItem.EditGameModeItems.Count == 0 || editItem.EditGameModeItems == null)
+            {
+                return BadRequest("Each game has to have at least one GameMode.");
+            }
+            else
+            {
+                for (var i = 0; i < editItem.EditGameModeItems.Count; i++)
+                {
+                    var gm = game.GameModes.SingleOrDefault(g => g.ID == editItem.EditGameModeItems[i].ID);
+                    if (gm != null)
+                    {
+                        gm.Name = editItem.EditGameModeItems[i].Name;
+                        gm.Description = editItem.EditGameModeItems[i].Description;
+                        gm.winCondition = _context.WinConditions.SingleOrDefault(w => w.ID == editItem.EditGameModeItems[i].WinConditionID);
+                        _context.Update(gm);
+                    }
+                    else if (gm == null)
+                    {
+                        if(_context.WinConditions.SingleOrDefault(w => w.ID == editItem.EditGameModeItems[i].WinConditionID)==null)
+                        {
+                            return BadRequest("Cannot find WinConditionId");
+                        }
+                        else
+                        {
+                            var gamemode = new GameMode
+                            {
+                                Name = editItem.EditGameModeItems[i].Name,
+                                Description = editItem.EditGameModeItems[i].Description,
+                                winCondition = _context.WinConditions.SingleOrDefault(w => w.ID == editItem.EditGameModeItems[i].WinConditionID)
+                            };
+                            game.GameModes.Add(gamemode);
+                        }
+                       
+                    }
+
+                }
+            }
+
+            var originalGameModeList = _context.GameModes.Where(gm => gm.game.ID == editItem.ID).ToList();
             var deletedGameModes = originalGameModeList.Where(gm => editItem.EditGameModeItems.All(gm2 => gm2 != null && gm2.ID != gm.ID));
-            //var result = list1.Except(list2);
             if (deletedGameModes != null )
             {
                 _context.GameModes.RemoveRange(deletedGameModes);
