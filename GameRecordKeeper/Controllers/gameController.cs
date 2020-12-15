@@ -42,12 +42,6 @@ namespace GameRecordKeeper.Controllers
         {
             _context = context;
         }
-        //[HttpPost]
-        //[Route("sort")]
-        //public ActionResult Sort(string? item)
-        //{
-
-        //}
        
         [HttpPost, Route("/api/Games")]//post can only pass in a class/complex object for parameter
         public ActionResult Get(GamesRequest request)
@@ -95,6 +89,18 @@ namespace GameRecordKeeper.Controllers
                                 games = games.Where(g => g.MaxPlayerCount <= value);
                             }
                                 
+                        }
+                        else if (splitItem[0] == "GameId")
+                        {
+                            if (splitItem[1] == "min")
+                            {
+                                games = games.Where(g => g.ID >= value);
+                            }
+                            else if (splitItem[1] == "max")
+                            {
+                                games = games.Where(g => g.ID <= value);
+                            }
+
                         }
 
                         else if (splitItem[0] == "GameModeCount")
