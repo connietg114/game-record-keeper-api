@@ -472,6 +472,7 @@ namespace GameRecordKeeper.Controllers
         {
             try
             {
+                //var gm = _context.GameMatches.Where(g => g.game.ID == id);
                 if (id == null)
                 {
                     return BadRequest("Game not found.");
@@ -480,12 +481,19 @@ namespace GameRecordKeeper.Controllers
                 else if (!ModelState.IsValid)
                 {
                     return BadRequest("Not a valid model.");
-                }else if (_context.GameMatches.Where(g=>g.game.ID==id).ToList().Count!=0)
+                }
+                else if (_context.GameMatches.Where(g=>g.game.ID==id).Count() != 0)
                 {
                     return BadRequest("Game " + id + " exists in Game Match(es).");
                 }
 
                 _context.Games.Remove(_context.Games.SingleOrDefault(g => g.ID == id));
+                var gamemodes = _context.GameModes.Where(g => g.game.ID == id);
+                foreach (var gm in gamemodes)
+                {
+                    _context.GameModes.Remove(gm);
+                }
+               
                 _context.SaveChanges();
                 return Ok("Game is deleted");
                 //return Ok(new {
@@ -522,7 +530,7 @@ namespace GameRecordKeeper.Controllers
                     if (item == null)
                     {
                         return BadRequest("Game not found");
-                    }else if (_context.GameMatches.Where(g => g.game.ID == id).ToList().Count != 0)
+                    }else if (_context.GameMatches.Where(g => g.game.ID==id).Count()!=0)
                     {
                         return BadRequest("Game " + id + " exists in Game Match(es).");
                     }
