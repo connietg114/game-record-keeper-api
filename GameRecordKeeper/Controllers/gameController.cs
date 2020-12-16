@@ -472,7 +472,6 @@ namespace GameRecordKeeper.Controllers
         {
             try
             {
-                //var gm = _context.GameMatches.Where(g => g.game.ID == id);
                 if (id == null)
                 {
                     return BadRequest("Game not found.");
@@ -537,8 +536,14 @@ namespace GameRecordKeeper.Controllers
                     else
                     {
                         _context.Games.Remove(item);
+                        var gamemodes = _context.GameModes.Where(g => g.game.ID == id);
+                        foreach (var gm in gamemodes)
+                        {
+                            _context.GameModes.Remove(gm);
+                        }
+
                     }
-                    
+
                 }
                 
                 _context.SaveChanges();
